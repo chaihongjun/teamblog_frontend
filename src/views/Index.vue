@@ -33,7 +33,7 @@
               <a href="http://jianshiduo.com">见识多</a>
             </div>-->
           </div>
-          <article class="excerpt excerpt-1 excerpt-sticky">
+          <!-- <article class="excerpt excerpt-1 excerpt-sticky">
             <a class="focus" href="https://demo.themebetter.com/dux/49.html">
               <img
                 data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/16-220x105.jpg"
@@ -510,7 +510,7 @@
             <p
               class="note"
             >前段时间，有传言称滴滴快的即将再融15亿美金，此后又将新一轮融资的目标设定为20亿美元。今天，程维在一封向股东的公开信中确认了这一消息，称“已在上周宣布面向全球投资者融资15亿美金，”在5天时间内该轮融资被超额认购后，滴滴快的决定增加融资规...</p>
-          </article>
+          </article>-->
 
           <Pagination></Pagination>
         </div>
@@ -525,12 +525,24 @@ import FocusSlide from "@/components/FocusSlide";
 
 import Pagination from "@/components/Pagination";
 import Sidebar from "@/components/Sidebar";
+
+import { allBlog } from "@/request/api"; // 导入全部博客内容接口
+
 export default {
   name: "Index",
+  data() {
+    return {};
+  },
   components: {
     FocusSlide,
     Pagination,
     Sidebar
+  },
+  //  页面 mounted 请求全部数据
+  mounted() {
+    allBlog().then(res => {
+      console.log(res);
+    });
   }
 };
 </script>

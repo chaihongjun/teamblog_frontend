@@ -22,4 +22,15 @@ module.exports = {
       })
       .end();
   },
+  devServer: {
+    proxy: {
+      "/api": {
+        target: "http://www.tp5.com/api",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": "http://localhost",
+        },
+      },
+    },
+  },
 };
