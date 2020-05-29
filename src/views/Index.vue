@@ -512,33 +512,32 @@
             >前段时间，有传言称滴滴快的即将再融15亿美金，此后又将新一轮融资的目标设定为20亿美元。今天，程维在一封向股东的公开信中确认了这一消息，称“已在上周宣布面向全球投资者融资15亿美金，”在5天时间内该轮融资被超额认购后，滴滴快的决定增加融资规...</p>
           </article>-->
 
-          <article class="excerpt excerpt-" +(index+1) v-for="(blog,index) in allBlog" :key="index">
-            <a class="focus" href="blog.">
+          <article class="excerpt excerpt-" v-for="(blog,index) in allBlog" :key="index">
+            <a class="focus" href="#">
               <img
                 data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/Cg-4WlV-hq2IHjVBAAPc7teoM4UAAFYigItZPcAA90G612-214x150.jpg"
-                alt="程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资-DUX主题演示"
+                alt="blog.title"
                 src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/thumbnail.png"
                 class="thumb"
               />
             </a>
             <header>
-              <a class="cat" href="https://demo.themebetter.com/dux/m">
+              <a class="cat" href="#">
                 移动
                 <i></i>
               </a>
               <h2>
-                <a
-                  href="https://demo.themebetter.com/dux/63.html"
-                  title="程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资-DUX主题演示"
-                >程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资</a>
+                <a href="blog.src" title="blog.title">{{blog.title}}</a>
               </h2>
             </header>
             <p class="meta">
               <time>
-                <i class="fa fa-clock-o"></i>2015-06-27
+                <i class="fa fa-clock-o"></i>
+                {{blog.create_time}}
               </time>
               <span class="author">
-                <i class="fa fa-user"></i>themebetter主题小秘
+                <i class="fa fa-user"></i>
+                {{blog.author}}
               </span>
               <span class="pv">
                 <i class="fa fa-eye"></i>阅读(6680)
@@ -551,9 +550,7 @@
                 <span>81</span>)
               </a>
             </p>
-            <p
-              class="note"
-            >前段时间，有传言称滴滴快的即将再融15亿美金，此后又将新一轮融资的目标设定为20亿美元。今天，程维在一封向股东的公开信中确认了这一消息，称“已在上周宣布面向全球投资者融资15亿美金，”在5天时间内该轮融资被超额认购后，滴滴快的决定增加融资规...</p>
+            <p class="note">{{blog.introduction}}...</p>
           </article>
 
           <Pagination></Pagination>
@@ -587,7 +584,7 @@ export default {
   //  页面 mounted 请求全部数据
   mounted() {
     allBlog().then(res => {
-      console.log(res.data);
+      //  console.log(res.data);
       this.allBlog = res.data;
     });
   }
