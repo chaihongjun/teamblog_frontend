@@ -512,6 +512,50 @@
             >前段时间，有传言称滴滴快的即将再融15亿美金，此后又将新一轮融资的目标设定为20亿美元。今天，程维在一封向股东的公开信中确认了这一消息，称“已在上周宣布面向全球投资者融资15亿美金，”在5天时间内该轮融资被超额认购后，滴滴快的决定增加融资规...</p>
           </article>-->
 
+          <article class="excerpt excerpt-" +(index+1) v-for="(blog,index) in allBlog" :key="index">
+            <a class="focus" href="blog.">
+              <img
+                data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/Cg-4WlV-hq2IHjVBAAPc7teoM4UAAFYigItZPcAA90G612-214x150.jpg"
+                alt="程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资-DUX主题演示"
+                src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/thumbnail.png"
+                class="thumb"
+              />
+            </a>
+            <header>
+              <a class="cat" href="https://demo.themebetter.com/dux/m">
+                移动
+                <i></i>
+              </a>
+              <h2>
+                <a
+                  href="https://demo.themebetter.com/dux/63.html"
+                  title="程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资-DUX主题演示"
+                >程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资</a>
+              </h2>
+            </header>
+            <p class="meta">
+              <time>
+                <i class="fa fa-clock-o"></i>2015-06-27
+              </time>
+              <span class="author">
+                <i class="fa fa-user"></i>themebetter主题小秘
+              </span>
+              <span class="pv">
+                <i class="fa fa-eye"></i>阅读(6680)
+              </span>
+              <a class="pc" href="https://demo.themebetter.com/dux/63.html#respond">
+                <i class="fa fa-comments-o"></i>评论(0)
+              </a>
+              <a href="javascript:;" etap="like" class="post-like" data-pid="63">
+                <i class="fa fa-thumbs-o-up"></i>赞(
+                <span>81</span>)
+              </a>
+            </p>
+            <p
+              class="note"
+            >前段时间，有传言称滴滴快的即将再融15亿美金，此后又将新一轮融资的目标设定为20亿美元。今天，程维在一封向股东的公开信中确认了这一消息，称“已在上周宣布面向全球投资者融资15亿美金，”在5天时间内该轮融资被超额认购后，滴滴快的决定增加融资规...</p>
+          </article>
+
           <Pagination></Pagination>
         </div>
       </div>
@@ -531,7 +575,9 @@ import { allBlog } from "@/request/api"; // 导入全部博客内容接口
 export default {
   name: "Index",
   data() {
-    return {};
+    return {
+      allBlog: []
+    };
   },
   components: {
     FocusSlide,
@@ -541,15 +587,13 @@ export default {
   //  页面 mounted 请求全部数据
   mounted() {
     allBlog().then(res => {
-      console.log(res);
+      console.log(res.data);
+      this.allBlog = res.data;
     });
   }
 };
 </script>
-   
-   
-   
-    <style>
+<style>
 a.tbas {
   border: 2px dashed #aaa;
   padding: 40px 15px;
