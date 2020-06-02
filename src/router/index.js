@@ -27,11 +27,6 @@ const routes = [
     name: "Tech",
     component: () => import("../views/Tech.vue"),
   },
-  {
-    path: "/tech/:id",
-    name: "Detail",
-    component: () => import("../views/Detail.vue"),
-  },
 ];
 
 const router = new VueRouter({
