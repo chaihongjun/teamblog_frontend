@@ -42,12 +42,12 @@
               />
             </a>
             <header>
-              <a class="cat" href="#">
-                移动
+              <a class="cat" href="'/'+blog.">
+                {{}}
                 <i></i>
               </a>
               <h2>
-                <a href="#" title="blog.title">{{blog.title}}</a>
+                <a href="#" :title="blog.title">{{blog.title}}</a>
               </h2>
             </header>
             <p class="meta">
@@ -72,12 +72,7 @@
             </p>
             <p class="note">{{blog.introduction}}...</p>
           </article>
-          <Pagination
-            :current_page="current_page"
-            :last_page="last_page"
-            :total="total"
-            @turnPage="turnPage"
-          ></Pagination>
+          <Pagination :currentPageProp="current_page" :lastPageProp="last_page" :totalProp="total"></Pagination>
         </div>
       </div>
       <Sidebar></Sidebar>
@@ -88,16 +83,15 @@
 import FocusSlide from "@/components/FocusSlide";
 import Pagination from "@/components/Pagination";
 import Sidebar from "@/components/Sidebar";
-import { allBlog } from "@/request/api"; // 导入全部博客内容接口
-// import { storage } from "@/assets/js/storage.js";
+import { getAllData } from "@/request/api";
 
 export default {
   name: "Index",
   data() {
     return {
+      // 数据初始化
       allBlog: [],
       total: 0, //  总分页数
-      initPageNum: 1, //初始页码
       current_page: 1, //当前页页码
       last_page: 0 //最后一页页码
     };
@@ -107,40 +101,24 @@ export default {
     Pagination,
     Sidebar
   },
-  methods: {
-    turnPage(pageNum) {
-      console.log("pageNum:" + pageNum);
-      allBlog({ page: pageNum }).then(res => {
-        this.allBlog = res.data; //博客数据
-        this.total = res.total; //总条数
-        this.current_page = res.current_page;
-        this.last_page = res.last_page;
 
-        // // ajax数据存到本地Localstorage
-        // localStorage.setItem("data", JSON.stringify(res.data));
-        // localStorage.setItem("total", JSON.stringify(res.total));
-        // localStorage.setItem("current_page", JSON.stringify(res.current_page));
-        // localStorage.setItem("last_page", JSON.stringify(res.last_page));
-      });
-    }
-  },
-  //  页面 mounted 请求全部数据
   mounted() {
-    allBlog({ page: this.initPageNum }).then(res => {
-      //  console.log(res.data);
-      this.allBlog = res.data; //博客数据
-      this.total = res.total; //总条数
+    console.log("Index");
+    if (this.$route.params.id === undefined) {
+      console.log("this.$route.params.id:" + this.$route.params.id);
+      this.current_page = 1;
+    } else {
+      this.current_page = this.$route.params.id;
+    }
+
+    getAllData(this.current_page).then(res => {
+      this.allBlog = res.data;
+      this.total = res.total;
       this.current_page = res.current_page;
       this.last_page = res.last_page;
     });
-    console.log("mounted current_page:" + this.current_page);
+    console.log("index mounted");
   }
-  // updated() {
-  //   this.DallBlog = JSON.parse(localStorage.getItem("data"));
-  //   this.Dtotal = JSON.parse(localStorage.getItem("total"));
-  //   this.Dcurrent_page = JSON.parse(localStorage.getItem("current_page"));
-  //   this.Dlast_page = JSON.parse(localStorage.getItem("last_page"));
-  // }
 };
 </script>
 <style>

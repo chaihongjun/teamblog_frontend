@@ -8,11 +8,7 @@
 
 
 <template>
-  <div
-    id="focusslide"
-    class="swiper-container swiper-container-initialized swiper-container-horizontal"
-  >
-    <div
+  <!-- <div
       class="swiper-wrapper"
       style="transform: translate3d(-1406px, 0px, 0px); transition-duration: 0ms;"
     >
@@ -52,32 +48,56 @@
           <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
         </a>
       </div>
-    </div>
-    <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-      <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span>
-      <span
-        class="swiper-pagination-bullet swiper-pagination-bullet-active"
-        tabindex="0"
-        role="button"
-        aria-label="Go to slide 2"
-      ></span>
-    </div>
-    <div
-      class="swiper-button-next swiper-button-white"
-      tabindex="0"
-      role="button"
-      aria-label="Next slide"
-    >
-      <i class="fa fa-chevron-right"></i>
-    </div>
-    <div
-      class="swiper-button-prev swiper-button-white"
-      tabindex="0"
-      role="button"
-      aria-label="Previous slide"
-    >
-      <i class="fa fa-chevron-left"></i>
-    </div>
-    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-  </div>
+  </div>-->
+
+  <swiper
+    class="swiper-container swiper-container-initialized swiper-container-horizontal"
+    :options="swiperOption"
+    id="focusslide"
+  >
+    <swiper-slide>
+      <a target="_blank" href="https://themebetter.com/theme/xiu">
+        <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
+      </a>
+    </swiper-slide>
+    <swiper-slide>
+      <a target="_blank" href="https://themebetter.com/theme/xiu">
+        <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
+      </a>
+    </swiper-slide>
+
+    <div class="swiper-pagination" slot="pagination"></div>
+
+    <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+    <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+  </swiper>
 </template>
+
+
+
+<script>
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/css/swiper.css";
+export default {
+  name: "FocusSlide",
+  data() {
+    return {
+      swiperOption: {
+        loop: true,
+        pagination: {
+          // el: "#focusslide"
+          // type: "progressbar"
+        },
+        navigation: {
+          nextEl: ".swiper-button-prev",
+          prevEl: ".swiper-button-next"
+        }
+      }
+    };
+  },
+  components: {
+    Swiper,
+    SwiperSlide
+  }
+};
+</script>

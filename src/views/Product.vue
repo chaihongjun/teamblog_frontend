@@ -285,6 +285,9 @@ export default {
   name: "Product",
   components: {
     Pagination
+  },
+  mounted() {
+    console.log("PRo");
   }
 };
 </script>

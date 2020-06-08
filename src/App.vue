@@ -31,6 +31,9 @@ export default {
     Search,
     Footer,
     Float
+  },
+  mounted() {
+    console.log("App");
   }
 };
 </script>

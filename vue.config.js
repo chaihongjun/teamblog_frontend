@@ -23,6 +23,7 @@ module.exports = {
       .end();
   },
   devServer: {
+    port: 8080,
     proxy: {
       "/api": {
         target: "http://www.tp5.com/api",

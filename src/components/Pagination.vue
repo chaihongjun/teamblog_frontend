@@ -9,80 +9,107 @@
   <div class="pagination">
     <ul>
       <li class="prev-page" v-if="hasFirst">
-        <a :href="'/page/'+(current_page - 1)" @click="prevPage()">上一页</a>
+        <a :href="'/'+cateDir+'/page/'+prevPageNum">上一页</a>
       </li>
-      <!-- <li v-for="()in ">
-        <a href="http://www.daqianduan.com/">1</a>
+      <li
+        v-for="(num,index) in pageNumArray"
+        :key="index"
+        :class="{'active':index===currentPageIndex}"
+      >
+        <a :href="cateDir+'/page/'+num">{{num}}</a>
       </li>
-      <li class="active">
-        <span>2</span>
-      </li>
-      <li>
-        <a href="http://www.daqianduan.com/page/3">3</a>
-      </li>
-      <li>
-        <a href="http://www.daqianduan.com/page/4">4</a>
-      </li>
-      <li>
-        <a href="http://www.daqianduan.com/page/5">5</a>
-      </li>
-      <li>
-        <span>...</span>
-      </li>-->
       <li class="next-page" v-if="hasLast">
-        <a :href="'/page/'+ (current_page + 1)" @click="nextPage()">下一页</a>
+        <a :href="cateDir+'/page/'+ nextPageNum">下一页</a>
       </li>
       <li>
-        <span>共 {{last_page}} 页</span>
+        <span>共 {{lastPageProp}} 页</span>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { allBlog } from "@/request/api";
-
 export default {
   name: "Pagination",
   props: {
-    current_page: {
-      type: Number,
+    currentPageProp: {
+      type: [Number, String],
       default: 1
     },
-    last_page: {
-      type: Number,
+    lastPageProp: {
+      type: [Number, String],
       default: 1
     },
-    total: Number
+    totalProp: {
+      type: [Number, String],
+      default: 1
+    },
+    cateDir: {
+      type: String,
+      default: ""
+    }
   },
-
-  methods: {
-    prevPage() {
-      console.log(this.current_page - 1);
-      this.$emit("turnPage", this.current_page - 1);
-    },
-    nextPage() {
-      console.log(this.current_page + 1);
-      this.$emit("turnPage", this.current_page + 1);
+  data() {
+    return {
+      pageNum: [],
+      currentPageIndex: 0,
+      index: 1,
+      cateDirData: this.cateDir
+    };
+  },
+  mounted() {
+    this.currentPageIndex = this.$route.params.id - 1;
+    // console.log("this.$route.params.id:" + this.$route.params.id);
+  },
+  updated() {
+    //强制在 默认首页添加 第一页高亮
+    // console.log(this.$route.params.id);
+    if (this.$route.params.id === undefined) {
+      let pagination = document.getElementsByClassName("pagination")[0];
+      let li = pagination.getElementsByTagName("li")[0];
+      li.classList.add("active");
     }
   },
   computed: {
     hasFirst() {
-      if (this.current_page === 1) {
+      if (this.currentPageProp === 1) {
         return false;
       } else {
         return true;
       }
     },
     hasLast() {
-      if (this.current_page === this.last_page) {
+      if (this.currentPageProp === this.lastPageProp) {
         return false;
       } else {
         return true;
       }
+    },
+    prevPageNum() {
+      return this.currentPageProp - 1;
+    },
+    nextPageNum() {
+      return this.currentPageProp + 1;
+    },
+    //转换数组 [1,2,...]
+    pageNumArray() {
+      this.pageNum = [];
+      for (let i = 1; i < this.lastPageProp + 1; i++) {
+        this.pageNum.push(i);
+      }
+      return this.pageNum;
+    },
+    //计算翻页按钮的链接
+    //  href="/page/1"        首页
+    //  href="/tech/page/1"   其他栏目页
+    getPrevNext() {
+      //首页
+      if (this.cateDirData === "") {
+      }
+      //非首页
+      else {
+        return this.cateDirData;
+      }
     }
-  },
-  mounted() {
-    console.log("current_page:" + this.current_page);
   }
 };
 </script>

@@ -23,11 +23,14 @@
         <div class="content">
           <header class="article-header">
             <h1 class="article-title">
-              <a href="https://demo.themebetter.com/dux/70.html">云适配获千万美金B轮融资，将开发移动端企业安全浏览器</a>
+              <a
+                href="https://demo.themebetter.com/dux/70.html"
+                v-if="detail.title"
+              >{{detail.title}}</a>
             </h1>
             <div class="article-meta">
-              <span class="item">2015-06-27</span>
-              <span class="item">来源：36kr</span>
+              <span class="item">{{detail.publish_time}}</span>
+              <span class="item">作者：{{detail.author}}</span>
               <span class="item">
                 分类：
                 <a href="https://demo.themebetter.com/dux/tech" rel="category tag">科技</a> /
@@ -40,24 +43,9 @@
               <span class="item"></span>
             </div>
           </header>
-          <article class="article-content">
-            <p>
-              <img
-                class="alignnone size-full wp-image-71"
-                src="http://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/110.jpg"
-                alt="1"
-                width="640"
-                height="351"
-                srcset="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/110.jpg 640w, https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/110-220x121.jpg 220w"
-                sizes="(max-width: 640px) 100vw, 640px"
-              />
-            </p>
-            <p>不论是打车，买菜，交水电费，乃至于按摩，现在几乎你能想到的消费行为都能通过移动端进行操作——事实已经证明移动端的对消费者服务是个大市场。那么对企业移动端的服务的市场又怎样呢？至少近日晨兴创投和 IDG 资本对云适配千万美元级的投资能告诉我们，风险资本觉得这个市场正在变好。</p>
-            <p>云适配创立于 2012 年，主要业务是通过网页内容的抓取和适配，将PC端的网页自动转化为适合移动端的网页。通过这项名为跨屏云 Xcloud 的服务，企业用户不用修改任何网页的前端设计便能把让本不支持移动端浏览的网页获得适应移动端排版和布局。 三年来，云适配的技术被用在了超过 30 万的企业网站上，其中包括中国政府网，北京大学官网，联想海信的官网等。</p>
-            <p>大部分企业用户的网页再适配都是在公有云完成，这部分服务云适配免费提供。不过一些对信息安全极为重视的客户，比如政府和金融企业等，会选择将跨屏云部署在自己的私有云上，云适配会向这些用户收取一定的费用。</p>
-            <p>除了网页适配外，云适配的另一项服务是开源的 HTML 5 前端框架 Amaze UI。Amaze UI 是一款类似 Bootsrap 的前端模块库，相较于 Twitter 驰名天下的 Boostrap，Amaze UI 做了更多针对中文和国内主流浏览器的优化。目前Amaze UI 在 GitHub上 有 4000 多的收藏和 1000 多的fork。利用 Amaze UI，开发者能使用和修改现成的 HTML 5 模块，从而加速开发。</p>
-            <p>当然，一个仅仅是现金流良好的自动化网页适配公司并不需要千万美元级的 B轮融资。云适配正在开发一款移动安全浏览器，试图利用跨屏云带来的用户基础进入更深层的企业服务市场。这款安全浏览器支持缓存数据沙盒化，以及VPN 网络沙盒化等功能，从而在网页端提供一个安全的移动互联网办公环境。目前这款浏览器尚在开发中，预计今年九月发布。</p>
-            <p>对于这次的融资，云适配的创始人，前微软 IE 工程师陈本峰说道，“因为我自己是 HTML 5 的中国区布道师，所以我觉得我们这次融资不仅是对这个企业，也是市场对 HTML 5 在更宽广的应用前景上的认可。”</p>
+
+          <article class="article-content" v-html="detail.content">
+            <!-- 内容区域 -->
           </article>
 
           <div class="post-actions">
@@ -72,7 +60,7 @@
           <div class="post-copyright">
             未经允许不得转载：
             <a href="https://demo.themebetter.com/dux">DUX主题演示</a> &raquo;
-            <a href="https://demo.themebetter.com/dux/70.html">云适配获千万美金B轮融资，将开发移动端企业安全浏览器</a>
+            <a href="https://demo.themebetter.com/dux/70.html">{{detail.title}}</a>
           </div>
           <div class="action-share">
             <div class="bdsharebuttonbox">
@@ -193,11 +181,38 @@
 
 <script>
 import Sidebar from "@/components/Sidebar";
-
+import { getDetailData } from "@/request/api";
 export default {
   name: "Detail",
   components: {
     Sidebar
+  },
+  data() {
+    return {
+      detailId: 0,
+      detail: {},
+      cateDir: "",
+      cateName: ""
+    };
+  },
+  mounted() {
+    console.log("Detail");
+
+    if (this.$route.params.detailId === undefined) {
+      console.log("this.$route.params.id:" + this.$route.params.detailId);
+      this.detailId = 1;
+    } else {
+      this.detailId = this.$route.params.detailId;
+    }
+
+    console.log(this.$route.params.cateName);
+    console.log(this.$route.params.detailId);
+    getDetailData(this.detailId).then(res => {
+      this.detail = res.data;
+      this.cateDir = res.cateDir;
+      this.cateName = res.cateName;
+    });
+    console.log("index mounted");
   }
 };
 </script>

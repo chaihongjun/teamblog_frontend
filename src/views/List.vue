@@ -1,0 +1,115 @@
+<!--
+ * @Author: ChaiHongJun
+ * @Date: 2020-05-25 17:06:48
+ * @LastEditTime: 2020-05-26 10:03:48
+ * @LastEditors: ChaiHongJun
+ * @Description: 头部文件注释
+--> 
+<template>
+  <section class="container">
+    <div class="content-wrap">
+      <div class="content">
+        <!-- <div class="orbui orbui-cat orbui-cat-01">
+          <a
+            class="tbas"
+            href="https://themebetter.com/theme/dux"
+            target="_blank"
+          >广告位，电脑和手机可分别设置，可放任何广告代码</a>
+        </div>-->
+        <div class="catleader">
+          <h1>{{cateName}}</h1>
+        </div>
+
+        <article class="excerpt" v-for="(blog,index) in cateBlogs" :key="index">
+          <a class="focus" href="#">
+            <img
+              data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/110-220x121.jpg"
+              alt="blog.title"
+              src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/thumbnail.png"
+              class="thumb"
+            />
+          </a>
+          <header>
+            <h2>
+              <a href="#" title="blog.title">{{blog.title}}</a>
+            </h2>
+          </header>
+          <p class="meta">
+            <time>
+              <i class="fa fa-clock-o"></i>
+              {{blog.publish_time}}
+            </time>
+            <span class="author">
+              <i class="fa fa-user"></i>
+              {{blog.author}}
+            </span>
+            <span class="pv">
+              <i class="fa fa-eye"></i>阅读(16147)
+            </span>
+            <a class="pc" href="https://demo.themebetter.com/dux/70.html#respond">
+              <i class="fa fa-comments-o"></i>评论(0)
+            </a>
+            <a href="javascript:;" etap="like" class="post-like" data-pid="70">
+              <i class="fa fa-thumbs-o-up"></i>赞(
+              <span>212</span>)
+            </a>
+          </p>
+          <p class="note">{{blog.introduction}}...</p>
+        </article>
+
+        <Pagination
+          :currentPageProp="current_page"
+          :lastPageProp="last_page"
+          :totalProp="total"
+          :cateDir="cateDir"
+        ></Pagination>
+      </div>
+    </div>
+    <Sidebar></Sidebar>
+  </section>
+</template>
+
+
+
+<script>
+import Pagination from "@/components/Pagination.vue";
+import Sidebar from "@/components/Sidebar.vue";
+
+import { getCateDataByPagination } from "@/request/api";
+export default {
+  name: "List",
+  data() {
+    return {
+      cateBlogs: [],
+      total: 0,
+      current_page: 1,
+      last_page: 0,
+      cateName: "",
+      cateDir: "",
+      cateId: 1
+    };
+  },
+  components: {
+    Pagination,
+    Sidebar
+  },
+  mounted() {
+    console.log("List");
+    if (this.$route.params.id === undefined) {
+      console.log("this.$route.params.id:" + this.$route.params.id);
+      this.current_page = 1;
+    } else {
+      this.current_page = this.$route.params.id;
+    }
+    getCateDataByPagination(this.cateId, this.current_page).then(res => {
+      this.cateBlogs = res.data;
+      this.total = res.total;
+      this.current_page = res.current_page;
+      this.last_page = res.last_page;
+      this.cateName = res.cateName;
+      this.cateDir = res.cateDir;
+      this.cateId = res.cateId;
+    });
+  }
+};
+</script>
