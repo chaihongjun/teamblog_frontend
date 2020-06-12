@@ -13,9 +13,9 @@
     <ul class="widget-navcontent">
       <li class="item item-01 active">
         <ul>
-          <li v-for="(item,index) in noticeList" :key="index">
-            <time>{{item.publish_time|getShortDate}}</time>
-            <a target="_blank" :href="'/'+cateDir+'/'+item.id+'.html'">{{item.title}}</a>
+          <li v-for="(blog,index) in blogs" :key="index">
+            <time>{{blog.publish_time|getShortDate}}</time>
+            <a target="_blank" :href="cateDir+'/'+blog.id+'.html'">{{blog.title}}</a>
           </li>
         </ul>
       </li>
@@ -28,12 +28,20 @@ export default {
   name: "Notice",
   data() {
     return {
-      noticeList: [],
-      cateName: "",
-      cateDir: "",
       limit: 5,
       noticeId: 5
     };
+  },
+  computed: {
+    blogs() {
+      return this.$store.state.noticeRes.data;
+    },
+    cateName() {
+      return this.$store.state.noticeRes.cateName;
+    },
+    cateDir() {
+      return this.$store.state.noticeRes.cateDir;
+    }
   },
   filters: {
     getShortDate(value) {
@@ -43,11 +51,12 @@ export default {
     }
   },
   mounted() {
-    getCateDataByLimit(this.noticeId, this.limit).then(res => {
-      this.noticeList = res.data;
-      this.cateName = res.cateName;
-      this.cateDir = res.cateDir;
-    });
+    //异步请求 公告 栏目数据
+    let payload = {
+      noticeId: this.noticeId,
+      limit: this.limit
+    };
+    this.$store.dispatch("getNoticeDataAction", payload);
   }
 };
 </script>

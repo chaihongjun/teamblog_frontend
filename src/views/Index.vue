@@ -11,7 +11,7 @@
       <div class="content-wrap">
         <div class="content">
           <Focus-Slide></Focus-Slide>
-          <article class="excerpt-minic excerpt-minic-index">
+          <!-- <article class="excerpt-minic excerpt-minic-index">
             <h2>
               <a class="red" href="https://demo.themebetter.com/dux/see">【今日观点】</a>
               <a
@@ -22,7 +22,7 @@
             <p
               class="note"
             >一次我下载几部电影，发现如果同时下载多部要等上几个小时，然后我把最想看的做个先后排序，去设置同时只能下载一部，结果是不到一杯茶功夫我就能看到最想看的电影。 这就像我们一段时间内想干成很多事情，是同时干还是有选择有顺序的干，结果很不一样。同时...</p>
-          </article>
+          </article>-->
           <div class="title">
             <h3>最新发布</h3>
             <!-- <div class="more">
@@ -32,8 +32,8 @@
               <a href="http://jianshiduo.com">见识多</a>
             </div>-->
           </div>
-          <article class="excerpt excerpt-" v-for="(blog,index) in allBlog" :key="index">
-            <a class="focus" href="#">
+          <article class="excerpt excerpt-" v-for="(blog,index) in blogs" :key="index">
+            <a class="focus" :href="cateDirPerPage[blog.cid]['dir']">
               <img
                 data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/Cg-4WlV-hq2IHjVBAAPc7teoM4UAAFYigItZPcAA90G612-214x150.jpg"
                 alt="blog.title"
@@ -42,12 +42,15 @@
               />
             </a>
             <header>
-              <a class="cat" href="'/'+blog.">
-                {{}}
+              <a class="cat" :href="cateDirPerPage[blog.cid]['dir']">
+                {{cateDirPerPage[blog.cid]['name']}}
                 <i></i>
               </a>
               <h2>
-                <a href="#" :title="blog.title">{{blog.title}}</a>
+                <a
+                  :href="cateDirPerPage[blog.cid]['dir']+'/'+blog.id+'.html'"
+                  :title="blog.title"
+                >{{blog.title}}</a>
               </h2>
             </header>
             <p class="meta">
@@ -72,7 +75,12 @@
             </p>
             <p class="note">{{blog.introduction}}...</p>
           </article>
-          <Pagination :currentPageProp="current_page" :lastPageProp="last_page" :totalProp="total"></Pagination>
+          <Pagination
+            :currentPageProp="current_page"
+            :lastPageProp="last_page"
+            :totalProp="total"
+            :cateDir="cateDir"
+          ></Pagination>
         </div>
       </div>
       <Sidebar></Sidebar>
@@ -84,40 +92,66 @@ import FocusSlide from "@/components/FocusSlide";
 import Pagination from "@/components/Pagination";
 import Sidebar from "@/components/Sidebar";
 import { getAllData } from "@/request/api";
-
 export default {
   name: "Index",
   data() {
     return {
       // 数据初始化
-      allBlog: [],
-      total: 0, //  总分页数
-      current_page: 1, //当前页页码
-      last_page: 0 //最后一页页码
+      // blogs: this.$store.getters.allBlog,
+      // total: this.$store.getters.total, //  总分页数
+      // current_page: this.$store.state.indexRes.current_page, //当前页页码
+      // last_page: this.$store.state.indexRes.last_page, //最后一页页码
+      // cateDirPerPage: this.$store.state.indexRes.cateDirPerPage,
+      // cateDir: this.$store.state.indexRes.cateDir
     };
   },
+
+  computed: {
+    blogs() {
+      return this.$store.state.indexRes.data;
+    },
+    total() {
+      return this.$store.state.indexRes.total;
+    },
+    current_page() {
+      return this.$store.state.indexRes.current_page;
+    },
+    last_page() {
+      return this.$store.state.indexRes.last_page;
+    },
+
+    cateDir() {
+      return this.$store.state.indexRes.cateDir;
+    },
+
+    cateId() {
+      return this.$store.state.indexRes.cateId;
+    },
+
+    cateDirPerPage() {
+      return this.$store.state.indexRes.cateDirPerPage;
+    }
+  },
+
   components: {
     FocusSlide,
     Pagination,
     Sidebar
   },
-
   mounted() {
-    console.log("Index");
-    if (this.$route.params.id === undefined) {
-      console.log("this.$route.params.id:" + this.$route.params.id);
-      this.current_page = 1;
+    //根据路由判断分页
+    if (this.$route.params.pageNumber === undefined) {
+      this.$store.commit("updateCurrentPage", 1);
     } else {
-      this.current_page = this.$route.params.id;
+      this.$store.commit("updateCurrentPage", this.$route.params.pageNumber);
     }
 
-    getAllData(this.current_page).then(res => {
-      this.allBlog = res.data;
-      this.total = res.total;
-      this.current_page = res.current_page;
-      this.last_page = res.last_page;
-    });
-    console.log("index mounted");
+    let payload = {
+      current_page: this.$store.state.current_page
+    };
+
+    //异步请求首页数据
+    this.$store.dispatch("getIndexDataAction", payload);
   }
 };
 </script>

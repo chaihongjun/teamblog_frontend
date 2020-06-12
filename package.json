@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "swiper": "^5.4.2",
+    "view-design": "^4.0.0",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-router": "^3.1.6",
@@ -20,6 +21,8 @@
     "@vue/cli-plugin-router": "~4.3.0",
     "@vue/cli-plugin-vuex": "~4.3.0",
     "@vue/cli-service": "~4.3.0",
+    "babel-plugin-import": "^1.8.0",
+    "vue-cli-plugin-iview": "^2.0.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

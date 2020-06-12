@@ -17,7 +17,11 @@ export const getCateDataByLimit = (categoryID, limit) =>
   get("/api/cate/" + categoryID + "/limit/" + limit);
 
 //全部数据随机N条 【limit】限制条数
-// export const getCateDataByLimit = (limit) => get("/api/limit/" + limit);
+export const getAllRandDataByLimit = (limit) => get("/api/rand/limit/" + limit);
+
+//指定分类数据随机N条 【limit】限制条数
+export const getCateRandDataByLimit = (categoryID, limit) =>
+  get("/api/cate/" + categoryID + "/rand/limit/" + limit);
 
 // 获取博客详情
 export const getDetailData = (detailID) => get("/api/detail/" + detailID);

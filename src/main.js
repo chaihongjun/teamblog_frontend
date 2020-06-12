@@ -20,13 +20,14 @@ Vue.config.productionTip = false;
 // import "./assets/css/main.css";
 // import "./assets/css/style.min.css";
 
-import "./assets/fonts/fa-brands-400.woff2";
-import "./assets/fonts/fa-regular-400.woff2";
-import "./assets/fonts/fontawesome-webfont.woff2";
+// import "./assets/fonts/fa-brands-400.woff2";
+// import "./assets/fonts/fa-regular-400.woff2";
+// import "./assets/fonts/fontawesome-webfont.woff2";
+// import "./plugins/iview.js";
 
 // import "./assets/js/bootstrap.min.js";
 // import "./assets/js/jquery.min.js";
-// import "./assets/js/loader.js";
+// // import "./assets/js/loader.js";
 // import "./assets/js/main.js";
 // import "./assets/js/swiper.min.js";
 

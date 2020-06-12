@@ -19,9 +19,8 @@
         <div class="catleader">
           <h1>{{cateName}}</h1>
         </div>
-
-        <article class="excerpt" v-for="(blog,index) in cateBlogs" :key="index">
-          <a class="focus" href="#">
+        <article class="excerpt" v-for="(blog,index) in blogs" :key="index">
+          <a class="focus" :href="cateDir+'/'+blog.id+'.html'">
             <img
               data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/110-220x121.jpg"
               alt="blog.title"
@@ -31,7 +30,7 @@
           </a>
           <header>
             <h2>
-              <a href="#" title="blog.title">{{blog.title}}</a>
+              <a :href="cateDir+'/'+blog.id+'.html'" :title="blog.title">{{blog.title}}</a>
             </h2>
           </header>
           <p class="meta">
@@ -56,7 +55,6 @@
           </p>
           <p class="note">{{blog.introduction}}...</p>
         </article>
-
         <Pagination
           :currentPageProp="current_page"
           :lastPageProp="last_page"
@@ -68,48 +66,73 @@
     <Sidebar></Sidebar>
   </section>
 </template>
-
-
-
 <script>
 import Pagination from "@/components/Pagination.vue";
 import Sidebar from "@/components/Sidebar.vue";
-
 import { getCateDataByPagination } from "@/request/api";
+import Bus from "@/bus";
 export default {
   name: "List",
   data() {
     return {
-      cateBlogs: [],
-      total: 0,
-      current_page: 1,
-      last_page: 0,
-      cateName: "",
-      cateDir: "",
-      cateId: 1
+      // cateBlogs: [],
+      // total: 0,
+      // current_page: 1
+      // last_page: 0,
+      // cateName: "",
+      // cateDir: "",
+      // cateId: 0
     };
+  },
+  computed: {
+    blogs() {
+      return this.$store.state.cateRes.data;
+    },
+    total() {
+      return this.$store.state.cateRes.total;
+    },
+    current_page() {
+      return this.$store.state.cateRes.current_page;
+    },
+    last_page() {
+      return this.$store.state.cateRes.last_page;
+    },
+
+    cateDir() {
+      return this.$store.state.cateRes.cateDir;
+    },
+
+    cateId() {
+      return this.$store.state.cateRes.cateId;
+    },
+
+    cateName() {
+      return this.$store.state.cateRes.cateName;
+    },
+
+    cateDirPerPage() {
+      return this.$store.state.cateRes.cateDirPerPage;
+    }
   },
   components: {
     Pagination,
     Sidebar
   },
   mounted() {
-    console.log("List");
-    if (this.$route.params.id === undefined) {
-      console.log("this.$route.params.id:" + this.$route.params.id);
-      this.current_page = 1;
+    if (this.$route.params.pageNumber === undefined) {
+      this.$store.commit("updateCurrentPage", 1);
     } else {
-      this.current_page = this.$route.params.id;
+      this.$store.commit("updateCurrentPage", this.$route.params.pageNumber);
     }
-    getCateDataByPagination(this.cateId, this.current_page).then(res => {
-      this.cateBlogs = res.data;
-      this.total = res.total;
-      this.current_page = res.current_page;
-      this.last_page = res.last_page;
-      this.cateName = res.cateName;
-      this.cateDir = res.cateDir;
-      this.cateId = res.cateId;
-    });
+
+    let payload = {
+      cateId: this.$store.state.current_cateId, //栏目ID
+      current_page: this.$store.state.current_page //当前分页
+    };
+
+    console.log(payload);
+    // 异步获取栏目数据
+    this.$store.dispatch("getCateDataAction", payload);
   }
 };
 </script>

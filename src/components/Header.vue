@@ -5,13 +5,11 @@
  * @LastEditors: ChaiHongJun
  * @Description: 头部文件注释
 --> 
-
-
 <template>
   <header class="header">
     <div class="container">
       <h1 class="logo">
-        <a href="https://demo.themebetter.com/dux" title="DUX主题官方演示站">
+        <a href="/" title="博客主页">
           <img
             src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/logo.png"
             alt="DUX主题官方演示站"
@@ -23,95 +21,53 @@
         <br />我们一直在努力
       </div>
       <ul class="site-nav site-navbar">
-        <li
-          id="menu-item-6"
-          class="aaa menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-6"
-        >
-          <router-link to="/">
+        <li class="menu-item" :class="$store.state.isActive==0?'current-menu-item':''">
+          <a href="/" @click="getMenuID(0)">
             <i class="fa fa-home"></i> 首页
-          </router-link>
+          </a>
         </li>
         <li
-          id="menu-item-413"
-          class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-413"
+          class="menu-item menu-item-has-children"
+          :class="$store.state.isActive==2?'current-menu-item':''"
         >
-          <router-link to="/product">
+          <a href="/product" @click="getMenuID(2)">
             <i class="fa fa-heart"></i> 产品中心
-          </router-link>
+          </a>
           <ul class="sub-menu">
-            <li
-              id="menu-item-476"
-              class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-476"
-            >
-              <a href="https://demo.themebetter.com/dux/product/erji">产品二级目录</a>
+            <li class="menu-item menu-item-has-children">
+              <a href="/product/computer" @click="getMenuID(3)">电脑</a>
               <ul class="sub-menu">
-                <li
-                  id="menu-item-477"
-                  class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-477"
-                >
-                  <a href="https://demo.themebetter.com/dux/product/erji/p31">产品三级目录</a>
-                </li>
-                <li
-                  id="menu-item-478"
-                  class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-478"
-                >
-                  <a href="https://demo.themebetter.com/dux/product/erji/p22">产品三级目录2</a>
-                </li>
-                <li
-                  id="menu-item-479"
-                  class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-479"
-                >
-                  <a href="https://demo.themebetter.com/dux/product/erji/p33">产品三级目录3</a>
+                <li class="menu-item">
+                  <a href="/product/computer/pc" @click="getMenuID(4)">pc机</a>
                 </li>
               </ul>
             </li>
           </ul>
         </li>
-        <li
-          id="menu-item-7"
-          class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7"
-        >
-          <router-link to="/tech">
+        <li class="menu-item" :class="$store.state.isActive==1?'current-menu-item':''">
+          <a href="/tech" @click="getMenuID(1)">
             <i class="fa fa-plug"></i> 科技
-          </router-link>
+          </a>
         </li>
-
-        <li
-          id="menu-item-118"
-          class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-118"
-        >
+        <li class="menu-item menu-item-has-children">
           <a>
             <i class="fa fa-file-text-o"></i> 独立页面
           </a>
           <ul class="sub-menu">
-            <li
-              id="menu-item-123"
-              class="menu-item menu-item-type-post_type menu-item-object-page menu-item-123"
-            >
+            <li class="menu-item">
               <a href="https://demo.themebetter.com/dux/sample-page">友情链接</a>
             </li>
-            <li
-              id="menu-item-122"
-              class="menu-item menu-item-type-post_type menu-item-object-page menu-item-122"
-            >
+            <li class="menu-item">
               <a href="https://demo.themebetter.com/dux/archives">页面存档</a>
             </li>
-
-            <li
-              id="menu-item-156"
-              class="menu-item menu-item-type-post_type menu-item-object-page menu-item-156"
-            >
+            <li class="menu-item">
               <a href="https://demo.themebetter.com/dux/no-sidebar">无边栏页面</a>
             </li>
-            <li
-              id="menu-item-121"
-              class="menu-item menu-item-type-post_type menu-item-object-page menu-item-121"
-            >
+            <li class="menu-item">
               <a href="https://demo.themebetter.com/dux/navs">网址导航</a>
             </li>
           </ul>
         </li>
-
         <li class="navto-search">
           <a href="javascript:;" class="search-show active">
             <i class="fa fa-search"></i>
@@ -147,15 +103,33 @@
     </div>
   </header>
 </template>
-
-
-
 <script>
+import Bus from "@/bus";
 export default {
-  name: "Header"
+  name: "Header",
+  // data() {
+  //   return {
+  //     isActive: 0
+  //   };
+  // },
+  methods: {
+    getMenuID(index) {
+      this.$store.commit("updateHilightMenu", index);
+      // this.isActive = index;
+
+      console.log("点击的栏目ID：" + index);
+      //通过mutation 修改栏目ID 和初始化分页
+      let payload = {
+        cateId: index
+      };
+      // 更新栏目ID 和 默认的页码
+      this.$store.commit("updateCateId", payload);
+      this.$store.commit("updateCurrentPage", 1);
+      // this.$store.dispatch("updateCateId", payload);
+      // this.$store.dispatch("updateCurrentPage", 1);
+    }
+  }
 };
 </script>
-
-
 <style>
 </style>

@@ -12,9 +12,9 @@
     <div class="breadcrumbs">
       <div class="container">
         当前位置：
-        <a href="https://demo.themebetter.com/dux">DUX主题演示</a>
+        <a href="/">首页</a>
         <small>></small>
-        <a href="https://demo.themebetter.com/dux/tech">科技</a>
+        <a :href="currentUrl">{{cateName}}</a>
         <small>></small> 正文
       </div>
     </div>
@@ -192,11 +192,27 @@ export default {
       detailId: 0,
       detail: {},
       cateDir: "",
-      cateName: ""
+      cateName: "",
+      currentUrl: ""
     };
+  },
+  methods: {
+    //获取当前页面的URL
+    getUrl() {
+      // /product/computer/pc/15.html
+      let pathname = window.location.pathname;
+      let urlString = pathname.split(".")[0].split("/");
+      let currentPath = "";
+      for (let i = 1; i < urlString.length - 1; i++) {
+        currentPath += "/" + urlString[i];
+      }
+      this.currentUrl = currentPath;
+    }
   },
   mounted() {
     console.log("Detail");
+    this.getUrl();
+    //console.log(this.getUrl());
 
     if (this.$route.params.detailId === undefined) {
       console.log("this.$route.params.id:" + this.$route.params.detailId);
@@ -207,6 +223,7 @@ export default {
 
     console.log(this.$route.params.cateName);
     console.log(this.$route.params.detailId);
+
     getDetailData(this.detailId).then(res => {
       this.detail = res.data;
       this.cateDir = res.cateDir;
