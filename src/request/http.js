@@ -1,26 +1,33 @@
 // 在http.js中引入axios
 import axios from "axios"; // 引入axios
-
+import store from "@/store"; // 引入axios
 axios.defaults.timeout = 10000;
-
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
-
 axios.defaults.headers.get["Content-Type"] = "application/json;charset=UTF-8";
-
 axios.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
-
 //定义一个请求拦截器
-// axios.interceptors.request.use(function(config) {
-//   store.state.isShow = true; //在请求发出之前进行一些操作,显示loading画面
-//   return config;
-// });
-// //定义一个响应拦截器
-// axios.interceptors.response.use(function(config) {
-//   store.state.isShow = false; //在这里对返回的数据进行处理，得到数据，关闭loading
-//   return config;
-// });
-
+axios.interceptors.request.use(
+  (config) => {
+    //加载Loading
+    store.commit("updateLoading", true);
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
+//定义一个响应拦截器
+axios.interceptors.response.use(
+  (response) => {
+    //关闭Loading
+    store.commit("updateLoading", false);
+    return response;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
 /**
  * get方法，对应get请求
  * @param {String} url [请求的url地址]
@@ -38,7 +45,6 @@ export function get(url) {
       });
   });
 }
-
 /**
  * post方法，对应post请求
  * @param {String} url [请求的url地址]

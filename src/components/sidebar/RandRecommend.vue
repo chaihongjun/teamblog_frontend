@@ -9,6 +9,8 @@
   <div class="widget widget_ui_posts">
     <h3>随机推荐</h3>
     <ul>
+      <Loading></Loading>
+
       <li v-for="(blog,index) in blogs " :key="index">
         <a :href="cateDirPerPage[blog.cid]['dir']+'/'+blog.id+'.html'">
           <span class="thumbnail">
@@ -28,6 +30,7 @@
   </div>
 </template>
 <script>
+import Loading from "@/views/Loading";
 import { getAllRandDataByLimit } from "@/request/api";
 export default {
   name: "RandRecommend",
@@ -61,6 +64,11 @@ export default {
     //   // this.cateName = res.cateName;
     //   // this.cateDir = res.cateDir;
     // });
+  },
+  components: {
+    Loading
   }
 };
 </script>
+
+

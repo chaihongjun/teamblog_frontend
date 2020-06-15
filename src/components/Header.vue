@@ -96,7 +96,7 @@
           href="https://demo.themebetter.com/dux/reset-password"
         >找回密码</a>
       </div>
-      <i class="fa fa-bars m-icon-nav"></i>
+      <i class="fa fa-bars m-icon-nav" @click="mobileMenu"></i>
       <a rel="nofollow" href="javascript:;" class="signin-loader m-icon-user">
         <i class="fa fa-user"></i>
       </a>
@@ -127,6 +127,26 @@ export default {
       this.$store.commit("updateCurrentPage", 1);
       // this.$store.dispatch("updateCateId", payload);
       // this.$store.dispatch("updateCurrentPage", 1);
+    },
+    mobileMenu() {
+      //显示 遮罩层和移动菜单
+
+      document
+        .getElementsByClassName("m-icon-nav")[0]
+        .addEventListener("click", function() {
+          document.getElementsByTagName("body")[0].classList.add("m-nav-show");
+
+          document
+            .getElementsByClassName("m-mask")[0]
+            .classList.toggle("show", true);
+
+          document
+            .getElementsByTagName("body")[0]
+            .classList.remove("search-on");
+          document
+            .getElementsByClassName(".search-show .fa")[0]
+            .classList.remove("fa-remove");
+        });
     }
   }
 };

@@ -10,6 +10,9 @@
     <ul class="widget-nav">
       <li class="active">{{cateName}}</li>
     </ul>
+
+    <Loading></Loading>
+
     <ul class="widget-navcontent">
       <li class="item item-01 active">
         <ul>
@@ -24,8 +27,12 @@
 </template>
 <script>
 import { getCateDataByLimit } from "@/request/api";
+import Loading from "@/views/Loading";
 export default {
   name: "Notice",
+  components: {
+    Loading
+  },
   data() {
     return {
       limit: 5,
@@ -60,3 +67,16 @@ export default {
   }
 };
 </script>
+
+
+<style scoped>
+.mask {
+  position: absolute;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.8); */
+}
+</style>

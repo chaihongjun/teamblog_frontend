@@ -16,6 +16,7 @@
             target="_blank"
           >广告位，电脑和手机可分别设置，可放任何广告代码</a>
         </div>-->
+        <Loading></Loading>
         <div class="catleader">
           <h1>{{cateName}}</h1>
         </div>
@@ -71,6 +72,7 @@ import Pagination from "@/components/Pagination.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import { getCateDataByPagination } from "@/request/api";
 import Bus from "@/bus";
+import Loading from "@/views/Loading";
 export default {
   name: "List",
   data() {
@@ -116,7 +118,8 @@ export default {
   },
   components: {
     Pagination,
-    Sidebar
+    Sidebar,
+    Loading
   },
   mounted() {
     if (this.$route.params.pageNumber === undefined) {

@@ -44,6 +44,10 @@ const routes = [
     component: () => import("../views/List.vue"),
   },
   {
+    path: "/:cateNameOne/:cateNameTwo/:detailId" + ".html", //文章详情
+    component: () => import("../views/Detail.vue"),
+  },
+  {
     path: "/:cateNameOne/:detailId" + ".html", //文章详情
     component: () => import("../views/Detail.vue"),
   },

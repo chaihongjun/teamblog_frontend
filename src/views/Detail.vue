@@ -21,6 +21,7 @@
     <section class="container">
       <div class="content-wrap">
         <div class="content">
+          <Loading></Loading>
           <header class="article-header">
             <h1 class="article-title">
               <a
@@ -181,11 +182,13 @@
 
 <script>
 import Sidebar from "@/components/Sidebar";
+import Loading from "@/views/Loading";
 import { getDetailData } from "@/request/api";
 export default {
   name: "Detail",
   components: {
-    Sidebar
+    Sidebar,
+    Loading
   },
   data() {
     return {
@@ -233,5 +236,4 @@ export default {
   }
 };
 </script>
-
 

@@ -29,6 +29,11 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    // Loading 状态变化
+    updateLoading(state, payload) {
+      state.isShow = payload;
+    },
+
     // 更新高亮菜单
     updateHilightMenu(state, payload) {
       state.isActive = payload;
