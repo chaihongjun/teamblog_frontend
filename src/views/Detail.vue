@@ -5,8 +5,6 @@
  * @LastEditors: ChaiHongJun
  * @Description: 头部文件注释
 --> 
-
-
 <template>
   <div class="single">
     <div class="breadcrumbs">
@@ -44,11 +42,9 @@
               <span class="item"></span>
             </div>
           </header>
-
           <article class="article-content" v-html="detail.content">
             <!-- 内容区域 -->
           </article>
-
           <div class="post-actions">
             <a href="javascript:;" etap="like" class="post-like action action-like" data-pid="70">
               <i class="fa fa-thumbs-o-up"></i>赞(
@@ -80,7 +76,6 @@
               <span>)</span>
             </div>
           </div>
-
           <div class="article-tags">
             标签：
             <a
@@ -89,7 +84,6 @@
             >浏览器</a>
             <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>
           </div>
-
           <div class="article-author">
             <img
               alt
@@ -104,23 +98,18 @@
               <a title="查看更多文章" href="https://demo.themebetter.com/dux/author/admin">themebetter主题小秘</a>
             </h4>Hi，我是themebetter主题小秘！我的老板是浩子，我还有其他几个兄弟姐妹，DUX、XIU、TOB等，我们都很帅气！其实我有很多话想说，只是，只是我比较内向！！这个介绍是不是很赞呢~~
           </div>
-
           <nav class="article-nav">
             <span class="article-nav-prev">
               上一篇
               <br />
-              <a
-                href="https://demo.themebetter.com/dux/66.html"
-                rel="prev"
-              >辛苦创业赚的钱不受银行待见，于是我们做了“企业活期宝”</a>
+              <a :href="prevUrl" rel="prev" v-if="detailId===1?false:true">{{prevTitle}}</a>
             </span>
             <span class="article-nav-next">
               下一篇
               <br />
-              <a href="https://demo.themebetter.com/dux/97.html" rel="next">从下载看我们该如何做事</a>
+              <a :href="nextUrl" rel="next">{{nextTitle}}</a>
             </span>
           </nav>
-
           <div class="relates">
             <div class="title">
               <h3>相关推荐</h3>
@@ -157,10 +146,8 @@
           </div>
         </div>
       </div>
-
       <Sidebar></Sidebar>
     </section>
-
     <div class="rewards-popover-mask" data-event="rewards-close"></div>
     <div class="rewards-popover">
       <h3>觉得文章有用就打赏一下文章作者</h3>
@@ -178,8 +165,6 @@
     </div>
   </div>
 </template>
-
-
 <script>
 import Sidebar from "@/components/Sidebar";
 import Loading from "@/views/Loading";
@@ -192,12 +177,52 @@ export default {
   },
   data() {
     return {
-      detailId: 0,
-      detail: {},
-      cateDir: "",
-      cateName: "",
+      // detailId: 0,
+      // detail: {},
+      // cateDir: "",
+      // cateName: "",
       currentUrl: ""
     };
+  },
+  computed: {
+    detailId() {
+      return this.$store.state.detailRes.data.id;
+    },
+    detail() {
+      return this.$store.state.detailRes.data;
+    },
+    cateDir() {
+      return this.$store.state.detailRes.cateDir;
+    },
+    cateName() {
+      return this.$store.state.detailRes.cateName;
+    },
+    preDetail() {
+      return this.$store.state.prevDetailRes.data;
+    },
+    nextDetail() {
+      return this.$store.state.nextDetailRes.data;
+    },
+    prevUrl() {
+      let cateDir = this.$store.state.prevDetailRes.cateDir;
+      let cateName = this.$store.state.prevDetailRes.cateName;
+      let id = this.$store.state.prevDetailRes.data.id;
+
+      return cateDir + "/" + id + ".html";
+    },
+    prevTitle() {
+      return this.$store.state.prevDetailRes.data.title;
+    },
+    nextUrl() {
+      let cateDir = this.$store.state.nextDetailRes.cateDir;
+      let cateName = this.$store.state.nextDetailRes.cateName;
+      let id = this.$store.state.nextDetailRes.data.id;
+
+      return cateDir + "/" + id + ".html";
+    },
+    nextTitle() {
+      return this.$store.state.nextDetailRes.data.title;
+    }
   },
   methods: {
     //获取当前页面的URL
@@ -213,27 +238,34 @@ export default {
     }
   },
   mounted() {
-    console.log("Detail");
+    const _document = document;
+
+    //
+
     this.getUrl();
     //console.log(this.getUrl());
-
     if (this.$route.params.detailId === undefined) {
-      console.log("this.$route.params.id:" + this.$route.params.detailId);
-      this.detailId = 1;
+      this.$store.commit("updateDetailId", 1);
     } else {
-      this.detailId = this.$route.params.detailId;
+      this.$store.commit("updateDetailId", this.$route.params.detailId);
     }
+    let payload = {
+      detailId: this.$store.state.detailId
+    };
+    let payloadPrev = {
+      detailId: parseInt(this.$store.state.detailId) - 1
+    };
+    let payloadNext = {
+      detailId: parseInt(this.$store.state.detailId) + 1
+    };
+    //异步请求详情页数据
+    this.$store.dispatch("getDetailDataAction", payload);
+    //获取上一篇
+    this.$store.dispatch("getPrevDetailDataAction", payloadPrev);
+    //获取下一篇
+    this.$store.dispatch("getNextDetailDataAction", payloadNext);
 
-    console.log(this.$route.params.cateName);
-    console.log(this.$route.params.detailId);
-
-    getDetailData(this.detailId).then(res => {
-      this.detail = res.data;
-      this.cateDir = res.cateDir;
-      this.cateName = res.cateName;
-    });
-    console.log("index mounted");
+    _document.title = this.$store.state.detailRes.data.title;
   }
 };
 </script>
-
