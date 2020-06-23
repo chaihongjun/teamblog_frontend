@@ -44,7 +44,12 @@
             />
           </a>
           <header>
-            <a class="cat" :href="cateDirPerPage[blog.cid]['dir']">
+            <!-- 点击按钮改变栏目ID -->
+            <a
+              class="cat"
+              :href="cateDirPerPage[blog.cid]['dir']"
+              @click="updateCateId({'cateId':cateDirPerPage[blog.cid]['id']})"
+            >
               {{cateDirPerPage[blog.cid]['name']}}
               <i></i>
             </a>
@@ -142,6 +147,7 @@ export default {
     Loading
   },
   mounted() {
+    const _document = document;
     //根据路由判断分页
     if (this.$route.params.pageNumber === undefined) {
       this.$store.commit("updateCurrentPage", 1);
@@ -155,6 +161,11 @@ export default {
 
     //异步请求首页数据
     this.$store.dispatch("getIndexDataAction", payload);
+  },
+  methods: {
+    updateCateId(payload) {
+      this.$store.commit("updateCateId", payload);
+    }
   }
 };
 </script>
