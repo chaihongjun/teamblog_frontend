@@ -122,12 +122,12 @@ export default {
     Loading
   },
   mounted() {
+    // 路由接收的页码
     if (this.$route.params.pageNumber === undefined) {
       this.$store.commit("updateCurrentPage", 1);
     } else {
       this.$store.commit("updateCurrentPage", this.$route.params.pageNumber);
     }
-
     let payload = {
       cateId: this.$store.state.current_cateId, //栏目ID
       current_page: this.$store.state.current_page //当前分页
