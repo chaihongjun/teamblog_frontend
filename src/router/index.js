@@ -22,7 +22,7 @@ const routes = [
     component: () => import("../views/Index.vue"),
   },
   {
-    path: "/page/:pageNumber", //全部文章列表
+    path: "/page/:pageNumber",
     component: () => import("../views/Index.vue"),
   },
   /////////////////////////////   列表页   /////////////////////////
@@ -37,10 +37,12 @@ const routes = [
     redirect: {
       path: "/:cateNameOne",
     },
+
     component: () => import("../views/List.vue"),
   },
   {
     path: "/:cateNameOne/page/:pageNumber", //栏目列表
+
     component: () => import("../views/List.vue"),
   },
   {
@@ -95,4 +97,5 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
 export default router;
