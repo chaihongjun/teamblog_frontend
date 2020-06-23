@@ -25,7 +25,16 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    Promise.reject(error);
+    // Promise.reject(error);
+    // console.log(error.response);
+    switch (error.response.status) {
+      case 404:
+        error.response.statusText = "接口地址不存在";
+        break;
+      case 500:
+        error.response.statusText = "接口返回数据错误";
+        break;
+    }
   }
 );
 /**
