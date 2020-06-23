@@ -26,6 +26,11 @@ export default new Vuex.Store({
     current_page: 1, // 当前分页页码
     current_cateId: 2, //当前栏目ID
     detailId: 1, //内容ID
+    detailRes: {}, // 详情页接口
+    prevDetailId: 0,
+    nextDetailId: 2,
+    prevDetailRes: {},
+    nextDetailRes: {},
   },
 
   mutations: {
@@ -47,20 +52,41 @@ export default new Vuex.Store({
     updateCurrentPage(state, payload) {
       state.current_page = payload;
     },
+
+    //更新详情页ID
+    updateDetailId(state, payload) {
+      state.detailId = payload;
+    },
+    //获取首页数据
     getIndexData(state, res) {
       state.indexRes = res;
     },
+
+    //获取公告数据
     getNoticeData(state, res) {
       state.noticeRes = res;
     },
+    //获取随机数据数据
     getRandData(state, res) {
       state.randRes = res;
     },
+
+    //获取分类数据
     getCateData(state, res) {
       state.cateRes = res;
     },
+    // 获取当前文章
     getDetailData(state, res) {
-      state.res = res;
+      state.detailRes = res;
+    },
+
+    // 获取前一篇
+    getPrevDetailData(state, res) {
+      state.prevDetailRes = res;
+    },
+    // 获取后一篇
+    getNextDetailData(state, res) {
+      state.nextDetailRes = res;
     },
   },
   // 页面数据请求
@@ -100,14 +126,31 @@ export default new Vuex.Store({
       );
     },
     // 详情页 请求
-    getDetailDataAction(context) {
-      getDetailData(this.$store.state.detailId).then((res) => {
+    getDetailDataAction(context, payload) {
+      getDetailData(payload.detailId).then((res) => {
         context.commit("getDetailData", res);
-        // this.detail = res.data;
-        // this.cateDir = res.cateDir;
-        // this.cateName = res.cateName;
       });
     },
+
+    // 前一篇
+    getPrevDetailDataAction(context, payload) {
+      getDetailData(payload.detailId).then((res) => {
+        console.log(res);
+        // context.commit("getPrevDetailData", res);
+      });
+    },
+
+    // 后一篇
+    getNextDetailDataAction(context, payload) {
+      getDetailData(payload.detailId)
+        .then((res) => {
+          context.commit("getNextDetailData", res);
+        })
+        .catch((err) => {
+          console.log("已经是最后一篇文章了");
+        });
+    },
+
     //侧栏推荐制定
     // 网站统计
   },
