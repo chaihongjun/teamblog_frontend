@@ -41,6 +41,13 @@ Vue.component("Spin", Spin);
 Vue.component("Icon", Icon);
 
 import "view-design/dist/styles/iview.css";
+
+//全局导航守卫
+// 配置SEO
+// router.beforeEach((to, from, next) => {
+//   document.title = to.meta.title;
+// });
+
 new Vue({
   router,
   store,
