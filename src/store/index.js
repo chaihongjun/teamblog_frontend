@@ -135,8 +135,7 @@ export default new Vuex.Store({
     // 前一篇
     getPrevDetailDataAction(context, payload) {
       getDetailData(payload.detailId).then((res) => {
-        console.log(res);
-        // context.commit("getPrevDetailData", res);
+        context.commit("getPrevDetailData", res);
       });
     },
 
