@@ -32,10 +32,11 @@
               <span class="item">作者：{{detail.author}}</span>
               <span class="item">
                 分类：
-                <a href="https://demo.themebetter.com/dux/tech" rel="category tag">科技</a> /
+                <!-- <a href="https://demo.themebetter.com/dux/tech" rel="category tag">科技</a> /
                 <a href="https://demo.themebetter.com/dux/m" rel="category tag">移动</a> /
                 <a href="https://demo.themebetter.com/dux/rong" rel="category tag">融资</a> /
-                <a href="https://demo.themebetter.com/dux/news" rel="category tag">资讯</a>
+                <a href="https://demo.themebetter.com/dux/news" rel="category tag">资讯</a>-->
+                <a :href="currentUrl" rel="category tag">{{cateName}}</a>
               </span>
               <span class="item post-views">阅读(16163)</span>
               <span class="item">评论(0)</span>
@@ -78,11 +79,18 @@
           </div>
           <div class="article-tags">
             标签：
-            <a
+            <!-- <a
               href="https://demo.themebetter.com/dux/tag/%e6%b5%8f%e8%a7%88%e5%99%a8"
               rel="tag"
             >浏览器</a>
-            <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>
+            <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>-->
+
+            <a
+              :href="'/tag/'+keyword"
+              v-for="(keyword,index)in keywords"
+              :key="index"
+              rel="tag"
+            >{{keyword}}</a>
           </div>
           <div class="article-author">
             <img
@@ -185,11 +193,15 @@ export default {
     };
   },
   computed: {
+    detail() {
+      return this.$store.state.detailRes.data;
+    },
     detailId() {
       return this.$store.state.detailRes.data.id;
     },
-    detail() {
-      return this.$store.state.detailRes.data;
+
+    keywords() {
+      return this.$store.state.detailRes.data.keywords;
     },
     cateDir() {
       return this.$store.state.detailRes.cateDir;
@@ -222,6 +234,14 @@ export default {
     },
     nextTitle() {
       return this.$store.state.nextDetailRes.data.title;
+    },
+
+    // 关键词字符串转换成数组
+    keywords() {
+      let keywordsString = this.$store.state.detailRes.data.keywords;
+
+      let keywordsArray = keywordsString.split(",");
+      return keywordsArray;
     }
   },
   methods: {
@@ -235,6 +255,7 @@ export default {
         currentPath += "/" + urlString[i];
       }
       this.currentUrl = currentPath;
+      console.log(this.currentUrl);
     }
   },
   mounted() {
