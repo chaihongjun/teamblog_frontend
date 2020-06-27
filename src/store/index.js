@@ -16,6 +16,7 @@ export default new Vuex.Store({
     //Loading 组件是否显示
     isShow: false,
     isActive: 0, // 菜单高亮
+    title: "", //文档标题
     indexRes: {}, // 首页接口
     cateRes: {}, //  分类栏目接口
     noticeRes: {}, // 公告接口
@@ -47,6 +48,7 @@ export default new Vuex.Store({
     // 修改 当前栏目ID
     updateCateId(state, payload) {
       state.current_cateId = payload.cateId;
+      // state.title = payload.title;
     },
     // 修改 当前分页页码
     updateCurrentPage(state, payload) {
@@ -57,6 +59,12 @@ export default new Vuex.Store({
     updateDetailId(state, payload) {
       state.detailId = payload;
     },
+
+    //更新当前页面标题
+    updateTitle(state, payload) {
+      state.title = payload;
+    },
+
     //获取首页数据
     getIndexData(state, res) {
       state.indexRes = res;
@@ -78,6 +86,7 @@ export default new Vuex.Store({
     // 获取当前文章
     getDetailData(state, res) {
       state.detailRes = res;
+      state.title = res.data.title;
     },
 
     // 获取前一篇
