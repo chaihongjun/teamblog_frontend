@@ -14,7 +14,7 @@
   <div class="rollbar rollbar-rb">
     <ul>
       <li>
-        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=937373201&site=qq&menu=yes">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=937373201&site=qq&menu=yes">
           <i class="fa fa-qq"></i>
           <span>QQ咨询</span>
         </a>
@@ -45,7 +45,7 @@
         </h6>
       </li>
       <li>
-        <a target="_blank" href="https://themebetter.com">
+        <a href="https://themebetter.com">
           <i class="fa fa-globe"></i>
           <span>在线咨询</span>
         </a>

@@ -18,7 +18,7 @@
         <ul>
           <li v-for="(blog,index) in blogs" :key="index">
             <time>{{blog.publish_time|getShortDate}}</time>
-            <a target="_blank" :href="cateDir+'/'+blog.id+'.html'">{{blog.title}}</a>
+            <a :href="cateDir+'/'+blog.id+'.html'">{{blog.title}}</a>
           </li>
         </ul>
       </li>

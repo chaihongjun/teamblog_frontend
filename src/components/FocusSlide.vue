@@ -56,12 +56,12 @@
     id="focusslide"
   >
     <swiper-slide>
-      <a target="_blank" href="https://themebetter.com/theme/xiu">
+      <a href="https://themebetter.com/theme/xiu">
         <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
       </a>
     </swiper-slide>
     <swiper-slide>
-      <a target="_blank" href="https://themebetter.com/theme/xiu">
+      <a href="https://themebetter.com/theme/xiu">
         <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
       </a>
     </swiper-slide>

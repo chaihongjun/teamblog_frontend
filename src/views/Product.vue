@@ -67,11 +67,7 @@
             <div class="tbqrcode" data-url="https://demo.themebetter.com/dux/product"></div>
           </div>
           <div class="orbui orbui-pcat orbui-pcat-01">
-            <a
-              class="tbas"
-              href="https://themebetter.com/theme/dux"
-              target="_blank"
-            >广告位，电脑和手机可分别设置，可放任何广告代码</a>
+            <a class="tbas" href="https://themebetter.com/theme/dux">广告位，电脑和手机可分别设置，可放任何广告代码</a>
           </div>
         </div>
 
