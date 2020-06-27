@@ -22,14 +22,12 @@
           <Loading></Loading>
           <header class="article-header">
             <h1 class="article-title">
-              <a
-                href="https://demo.themebetter.com/dux/70.html"
-                v-if="detail.title"
-              >{{detail.title}}</a>
+              <a href="https://demo.themebetter.com/dux/70.html">{{detail.title}}</a>
             </h1>
             <div class="article-meta">
               <span class="item">{{detail.publish_time}}</span>
               <span class="item">作者：{{detail.author}}</span>
+
               <span class="item">
                 分类：
                 <!-- <a href="https://demo.themebetter.com/dux/tech" rel="category tag">科技</a> /
@@ -43,7 +41,7 @@
               <span class="item"></span>
             </div>
           </header>
-          <article class="article-content" v-html="detail.content">
+          <article class="article-content" v-html="detail.content" v-if="detail.content">
             <!-- 内容区域 -->
           </article>
           <div class="post-actions">
@@ -58,7 +56,7 @@
           <div class="post-copyright">
             未经允许不得转载：
             <a href="https://demo.themebetter.com/dux">DUX主题演示</a> &raquo;
-            <a href="https://demo.themebetter.com/dux/70.html">{{detail.title}}</a>
+            <a :href="currentUrl">{{detail.title}}</a>
           </div>
           <div class="action-share">
             <div class="bdsharebuttonbox">
@@ -87,7 +85,7 @@
 
             <a
               :href="'/tag/'+keyword"
-              v-for="(keyword,index)in keywords"
+              v-for="(keyword,index) in keywords"
               :key="index"
               rel="tag"
             >{{keyword}}</a>
@@ -194,26 +192,40 @@ export default {
   },
   computed: {
     detail() {
-      return this.$store.state.detailRes.data;
+      if (this.$store.state.detailRes.data) {
+        return this.$store.state.detailRes.data;
+      }
     },
     detailId() {
-      return this.$store.state.detailRes.data.id;
+      if (this.$store.state.detailRes.data.id) {
+        return this.$store.state.detailRes.data.id;
+      }
     },
 
     keywords() {
-      return this.$store.state.detailRes.data.keywords;
+      if (this.$store.state.detailRes.data.keywords) {
+        return this.$store.state.detailRes.data.keywords;
+      }
     },
     cateDir() {
-      return this.$store.state.detailRes.cateDir;
+      if (this.$store.state.detailRes.cateDir) {
+        return this.$store.state.detailRes.cateDir;
+      }
     },
     cateName() {
-      return this.$store.state.detailRes.cateName;
+      if (this.$store.state.detailRes.cateName) {
+        return this.$store.state.detailRes.cateName;
+      }
     },
     preDetail() {
-      return this.$store.state.prevDetailRes.data;
+      if (this.$store.state.prevDetailRes.data) {
+        return this.$store.state.prevDetailRes.data;
+      }
     },
     nextDetail() {
-      return this.$store.state.nextDetailRes.data;
+      if (this.$store.state.nextDetailRes.data) {
+        return this.$store.state.nextDetailRes.data;
+      }
     },
     prevUrl() {
       let cateDir = this.$store.state.prevDetailRes.cateDir;
@@ -223,7 +235,9 @@ export default {
       return cateDir + "/" + id + ".html";
     },
     prevTitle() {
-      return this.$store.state.prevDetailRes.data.title;
+      if (this.$store.state.prevDetailRes.data.title) {
+        return this.$store.state.prevDetailRes.data.title;
+      }
     },
     nextUrl() {
       let cateDir = this.$store.state.nextDetailRes.cateDir;
@@ -233,7 +247,9 @@ export default {
       return cateDir + "/" + id + ".html";
     },
     nextTitle() {
-      return this.$store.state.nextDetailRes.data.title;
+      if (this.$store.state.nextDetailRes.data.title) {
+        return this.$store.state.nextDetailRes.data.title;
+      }
     },
 
     // 关键词字符串转换成数组
@@ -261,8 +277,6 @@ export default {
   mounted() {
     const _document = document;
 
-    //
-
     this.getUrl();
     //console.log(this.getUrl());
     if (this.$route.params.detailId === undefined) {
@@ -281,12 +295,18 @@ export default {
     };
     //异步请求详情页数据
     this.$store.dispatch("getDetailDataAction", payload);
+
     //获取上一篇
     this.$store.dispatch("getPrevDetailDataAction", payloadPrev);
     //获取下一篇
     this.$store.dispatch("getNextDetailDataAction", payloadNext);
 
-    _document.title = this.$store.state.detailRes.data.title;
+    //获取并设置当前页面的标题 ，设置当前
+    if (this.$store.state.title) {
+      _document.title = this.$store.state.title;
+
+      console.log(this.$store.state.title);
+    }
   }
 };
 </script>
