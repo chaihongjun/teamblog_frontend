@@ -7,26 +7,35 @@
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 Vue.use(VueRouter);
 const routes = [
   ///////////////////////  首页 ////////////////////////
   {
     path: "",
     component: () => import("../views/Index.vue"),
+    meta: {
+      title: "博客首页",
+    },
   },
   {
     path: "/page/1",
     redirect: {
       path: "/",
+      meta: {
+        title: "博客首页_第一页",
+      },
     },
     component: () => import("../views/Index.vue"),
   },
   {
     path: "/page/:pageNumber",
     component: () => import("../views/Index.vue"),
+    meta: {
+      title: "博客首页_" + store.state.current_page,
+    },
   },
   /////////////////////////////   列表页   /////////////////////////
-
   //////////////////////  一级栏目
   {
     path: "/:cateNameOne", //栏目列表
@@ -37,12 +46,10 @@ const routes = [
     redirect: {
       path: "/:cateNameOne",
     },
-
     component: () => import("../views/List.vue"),
   },
   {
     path: "/:cateNameOne/page/:pageNumber", //栏目列表
-
     component: () => import("../views/List.vue"),
   },
   {
@@ -86,7 +93,6 @@ const routes = [
     component: () => import("../views/List.vue"),
   },
   ///////////////////////////////  详情  ////////////////////////
-
   {
     path: "/:cateNameOne/:cateNameTwo/:cateNameThree/:detailId" + ".html", //文章详情
     component: () => import("../views/Detail.vue"),
@@ -96,6 +102,14 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+//全局导航
+router.afterEach((to, from) => {
+  let id = to.params.detailId;
+  if (id) {
+    //
+  }
 });
 
 export default router;
