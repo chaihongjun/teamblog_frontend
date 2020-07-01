@@ -18,7 +18,7 @@
         <ul>
           <li v-for="(blog,index) in blogs" :key="index">
             <time>{{blog.publish_time|getShortDate}}</time>
-            <a :href="cateDir+'/'+blog.id+'.html'">{{blog.title}}</a>
+            <a :href="cateDir+'/'+blog.id+'.html'" @click="updateDetailId(blog.id)">{{blog.title}}</a>
           </li>
         </ul>
       </li>
@@ -64,6 +64,12 @@ export default {
       limit: this.limit
     };
     this.$store.dispatch("getNoticeDataAction", payload);
+  },
+  methods: {
+    //更新文章ID
+    updateDetailId(payload) {
+      this.$store.commit("updateDetailId", payload);
+    }
   }
 };
 </script>
