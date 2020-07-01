@@ -6,7 +6,7 @@
  * @Description: 头部文件注释
 --> 
 <template>
-  <div class="widget widget_ui_tags">
+  <!-- <div class="widget widget_ui_tags">
     <h3>热门标签</h3>
     <div class="items">
       <a href="https://demo.themebetter.com/dux/tag/app">app (3)</a>
@@ -33,7 +33,7 @@
       <a href="https://demo.themebetter.com/dux/tag/3d-%e6%89%ab%e6%8f%8f">3D 扫描 (1)</a>
       <a href="https://demo.themebetter.com/dux/tag/%e5%ae%b6%e6%95%99">家教 (1)</a>
     </div>
-  </div>
+  </div>-->
 </template>
 
 
