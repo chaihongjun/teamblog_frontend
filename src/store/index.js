@@ -10,6 +10,13 @@ import { getAllRandDataByLimit } from "@/request/api";
 import { getCateDataByPagination } from "@/request/api";
 //  详情页 请求
 import { getDetailData } from "@/request/api";
+
+//  轮播图 请求
+import { getSlideData } from "@/request/api";
+
+// 推荐相关
+import { getRelateData } from "@/request/api";
+
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -32,6 +39,8 @@ export default new Vuex.Store({
     nextDetailId: 2,
     prevDetailRes: {},
     nextDetailRes: {},
+    slideRes: {},
+    relateRes: [],
   },
 
   mutations: {
@@ -97,6 +106,17 @@ export default new Vuex.Store({
     getNextDetailData(state, res) {
       state.nextDetailRes = res;
     },
+    // 获取轮播图
+    // 获取后一篇
+    getSlideData(state, res) {
+      state.slideRes = res;
+    },
+
+    // 详情页 相关推荐
+
+    getRelateRecommend(state, res) {
+      state.relateRes = res.data;
+    },
   },
   // 页面数据请求
   actions: {
@@ -150,13 +170,29 @@ export default new Vuex.Store({
 
     // 后一篇
     getNextDetailDataAction(context, payload) {
-      getDetailData(payload.detailId)
-        .then((res) => {
-          context.commit("getNextDetailData", res);
-        })
-        .catch((err) => {
-          console.log("已经是最后一篇文章了");
-        });
+      getDetailData(payload.detailId).then((res) => {
+        context.commit("getNextDetailData", res);
+      });
+    },
+
+    //轮播图
+    getSildeDataAction(context, payload) {
+      getSlideData(payload.limit).then((res) => {
+        context.commit("getSlideData", res);
+      });
+    },
+
+    //详情页 相关推荐
+
+    getRelateRecommend(context, payload) {
+      // 将当前页面的关键词数组依次进行匹配查询
+      for (let i = 0; i < payload.keywords.length; i++) {
+        getRelateData(payload.keywords[i], payload.limit, payload.id).then(
+          (res) => {
+            context.commit("getRelateRecommend", res);
+          }
+        );
+      }
     },
 
     //侧栏推荐制定
