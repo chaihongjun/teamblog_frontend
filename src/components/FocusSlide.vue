@@ -55,14 +55,9 @@
     :options="swiperOption"
     id="focusslide"
   >
-    <swiper-slide>
-      <a href="https://themebetter.com/theme/xiu">
-        <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
-      </a>
-    </swiper-slide>
-    <swiper-slide>
-      <a href="https://themebetter.com/theme/xiu">
-        <img src="https://themebetter.com/uploads/2014/11/hs-xiu.jpg" />
+    <swiper-slide v-for="(slide,index) of slides" :key="index">
+      <a href="#">
+        <img :src="slide.link" />
       </a>
     </swiper-slide>
 
@@ -78,6 +73,9 @@
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
+
+import { getSliderData } from "@/request/api";
+
 export default {
   name: "FocusSlide",
   data() {
@@ -98,6 +96,20 @@ export default {
   components: {
     Swiper,
     SwiperSlide
+  },
+  computed: {
+    slides() {
+      return this.$store.state.slideRes.data;
+    }
+  },
+  mounted() {
+    //获取轮播图
+
+    let payload = {
+      limit: 5
+    };
+
+    this.$store.dispatch("getSildeDataAction", payload);
   }
 };
 </script>
