@@ -106,6 +106,7 @@ const router = new VueRouter({
 
 //全局导航
 router.afterEach((to, from) => {
+  console.log(to);
   let id = to.params.detailId;
   if (id) {
     //
