@@ -25,3 +25,10 @@ export const getCateRandDataByLimit = (categoryID, limit) =>
 
 // 获取博客详情
 export const getDetailData = (detailID) => get("/api/detail/" + detailID);
+
+// 获取轮播图
+export const getSlideData = (limit) => get("/api/slide/" + limit);
+
+// 根据关键词 获取相关推荐  id 为当前文档ID
+export const getRelateData = (keyword, limit, id) =>
+  get("/api/relate/" + keyword + "/limit/" + limit + "/id/" + id);
