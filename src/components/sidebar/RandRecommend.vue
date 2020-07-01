@@ -12,7 +12,10 @@
       <Loading></Loading>
 
       <li v-for="(blog,index) in blogs " :key="index">
-        <a :href="cateDirPerPage[blog.cid]['dir']+'/'+blog.id+'.html'">
+        <a
+          :href="cateDirPerPage[blog.cid]['dir']+'/'+blog.id+'.html'"
+          @click="updateDetailId(blog.id)"
+        >
           <span class="thumbnail">
             <img
               data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2018/10/34-220x150.jpg"
@@ -38,6 +41,9 @@ export default {
     return {
       limit: 5
     };
+  },
+  components: {
+    Loading
   },
   computed: {
     blogs() {
@@ -65,8 +71,12 @@ export default {
     //   // this.cateDir = res.cateDir;
     // });
   },
-  components: {
-    Loading
+
+  methods: {
+    //更新文章ID
+    updateDetailId(payload) {
+      this.$store.commit("updateDetailId", payload);
+    }
   }
 };
 </script>
