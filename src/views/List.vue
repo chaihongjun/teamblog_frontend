@@ -21,17 +21,21 @@
           <h1>{{cateName}}</h1>
         </div>
         <article class="excerpt" v-for="(blog,index) in blogs" :key="index">
-          <a class="focus" :href="cateDir+'/'+blog.id+'.html'">
+          <a class="focus" :href="cateDir+'/'+blog.id+'.html'" @click="updateDetailId(blog.id)">
             <img
-              data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/110-220x121.jpg"
-              alt="blog.title"
+              :data-src="'localhost:8080/public'+blog.thumb"
+              :alt="blog.title"
               src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/thumbnail.png"
               class="thumb"
             />
           </a>
           <header>
             <h2>
-              <a :href="cateDir+'/'+blog.id+'.html'" :title="blog.title">{{blog.title}}</a>
+              <a
+                :href="cateDir+'/'+blog.id+'.html'"
+                :title="blog.title"
+                @click="updateDetailId(blog.id)"
+              >{{blog.title}}</a>
             </h2>
           </header>
           <p class="meta">
@@ -136,6 +140,12 @@ export default {
     console.log(payload);
     // 异步获取栏目数据
     this.$store.dispatch("getCateDataAction", payload);
+  },
+  methods: {
+    //更新文章ID
+    updateDetailId(payload) {
+      this.$store.commit("updateDetailId", payload);
+    }
   }
 };
 </script>
