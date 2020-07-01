@@ -34,14 +34,13 @@
 
         <Loading></Loading>
 
-        <article class="excerpt excerpt-" v-for="(blog,index) in blogs" :key="index">
-          <a class="focus" :href="cateDirPerPage[blog.cid]['dir']">
-            <img
-              data-src="https://demo.themebetter.com/dux/wp-content/uploads/sites/3/2015/06/Cg-4WlV-hq2IHjVBAAPc7teoM4UAAFYigItZPcAA90G612-214x150.jpg"
-              alt="blog.title"
-              src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/thumbnail.png"
-              class="thumb"
-            />
+        <article :class="'excerpt excerpt-'+(index+1)" v-for="(blog,index) in blogs" :key="index">
+          <a
+            class="focus"
+            :href="cateDirPerPage[blog.cid]['dir']+'/'+blog.id+'.html'"
+            @click="updateDetailId(blog.id)"
+          >
+            <img :src="'http://localhost:8080'+blog.thumb" :alt="blog.title" class="thumb" />
           </a>
           <header>
             <!-- 点击按钮改变栏目ID -->
@@ -57,6 +56,7 @@
               <a
                 :href="cateDirPerPage[blog.cid]['dir']+'/'+blog.id+'.html'"
                 :title="blog.title"
+                @click="updateDetailId(blog.id)"
               >{{blog.title}}</a>
             </h2>
           </header>
@@ -156,15 +156,21 @@ export default {
     }
 
     let payload = {
-      current_page: this.$store.state.current_page
+      current_page: this.$store.state.current_page,
+      detailId: this
     };
 
     //异步请求首页数据
     this.$store.dispatch("getIndexDataAction", payload);
   },
   methods: {
+    //更新栏目ID
     updateCateId(payload) {
       this.$store.commit("updateCateId", payload);
+    },
+    //更新文章ID
+    updateDetailId(payload) {
+      this.$store.commit("updateDetailId", payload);
     }
   }
 };
