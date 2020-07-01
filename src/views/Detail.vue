@@ -16,7 +16,7 @@
         <small>></small> 正文
       </div>
     </div>
-    <section class="container">
+    <section class="container" v-if="detail">
       <div class="content-wrap">
         <div class="content">
           <Loading></Loading>
@@ -44,7 +44,7 @@
           <article class="article-content" v-html="detail.content" v-if="detail.content">
             <!-- 内容区域 -->
           </article>
-          <div class="post-actions">
+          <!-- <div class="post-actions">
             <a href="javascript:;" etap="like" class="post-like action action-like" data-pid="70">
               <i class="fa fa-thumbs-o-up"></i>赞(
               <span>212</span>)
@@ -52,13 +52,13 @@
             <a href="javascript:;" class="action action-rewards" data-event="rewards">
               <i class="fa fa-jpy"></i> 打赏
             </a>
-          </div>
+          </div>-->
           <div class="post-copyright">
             未经允许不得转载：
-            <a href="https://demo.themebetter.com/dux">DUX主题演示</a> &raquo;
+            <a href="/">博客首页</a> &raquo;
             <a :href="currentUrl">{{detail.title}}</a>
           </div>
-          <div class="action-share">
+          <!-- <div class="action-share">
             <div class="bdsharebuttonbox">
               <span>分享到：</span>
               <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
@@ -74,8 +74,8 @@
               <a class="bds_count" data-cmd="count" title="累计分享0次">0</a>
               <span>)</span>
             </div>
-          </div>
-          <div class="article-tags">
+          </div>-->
+          <div class="article-tags" v-if="keywords.length>0">
             标签：
             <!-- <a
               href="https://demo.themebetter.com/dux/tag/%e6%b5%8f%e8%a7%88%e5%99%a8"
@@ -108,45 +108,26 @@
             <span class="article-nav-prev">
               上一篇
               <br />
-              <a :href="prevUrl" rel="prev" v-if="detailId===1?false:true">{{prevTitle}}</a>
+              <a
+                :href="prevUrl"
+                rel="prev"
+                v-if="detailId===1?false:true"
+                @click="updateDetailId(detailId-1)"
+              >{{prevTitle}}</a>
             </span>
             <span class="article-nav-next">
               下一篇
               <br />
-              <a :href="nextUrl" rel="next">{{nextTitle}}</a>
+              <a :href="nextUrl" rel="next" @click="updateDetailId(detailId+1)">{{nextTitle}}</a>
             </span>
           </nav>
-          <div class="relates">
+          <div class="relates" v-if="relates">
             <div class="title">
               <h3>相关推荐</h3>
             </div>
             <ul>
-              <li>
-                <a href="https://demo.themebetter.com/dux/541.html">一个演示，样式有待调整</a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/354.html">
-                  文章副标题的展示效果 每个文章都可以添加一个副标题
-                  <span>副标题显示文字</span>
-                </a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/160.html">这是一篇测试&#038;视频页面</a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/73.html">无缩略图的文章在列表中的展示效果 无图也逼格</a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/129.html">饿了么融资6.3亿美元被指造假 实际不足4亿美元</a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/66.html">辛苦创业赚的钱不受银行待见，于是我们做了“企业活期宝”</a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/63.html">程维发布股东公开信，确认滴滴快的正在进行15亿美元以上的融资</a>
-              </li>
-              <li>
-                <a href="https://demo.themebetter.com/dux/60.html">信息平台“时差族”完成500万元天使融资</a>
+              <li v-for="(relate,index) of relates" :key="index">
+                <a href="#">{{relate.title}}</a>
               </li>
             </ul>
           </div>
@@ -202,11 +183,11 @@ export default {
       }
     },
 
-    keywords() {
-      if (this.$store.state.detailRes.data.keywords) {
-        return this.$store.state.detailRes.data.keywords;
-      }
-    },
+    // keywords() {
+    //   if (this.$store.state.detailRes.data.keywords) {
+    //     return this.$store.state.detailRes.data.keywords;
+    //   }
+    // },
     cateDir() {
       if (this.$store.state.detailRes.cateDir) {
         return this.$store.state.detailRes.cateDir;
@@ -258,6 +239,9 @@ export default {
 
       let keywordsArray = keywordsString.split(",");
       return keywordsArray;
+    },
+    relates() {
+      return this.$store.state.relateRes;
     }
   },
   methods: {
@@ -272,6 +256,10 @@ export default {
       }
       this.currentUrl = currentPath;
       console.log(this.currentUrl);
+    },
+    //更新文章ID
+    updateDetailId(payload) {
+      this.$store.commit("updateDetailId", payload);
     }
   },
   mounted() {
@@ -301,12 +289,17 @@ export default {
     //获取下一篇
     this.$store.dispatch("getNextDetailDataAction", payloadNext);
 
-    //获取并设置当前页面的标题 ，设置当前
-    if (this.$store.state.title) {
-      _document.title = this.$store.state.title;
+    // 获取相关推荐
+    let that = this;
+    let payloadRelate = {
+      limit: 10,
+      keywords: that.keywords,
+      id: this.$store.state.detailId
+    };
+    this.$store.dispatch("getRelateRecommend", payloadRelate);
 
-      console.log(this.$store.state.title);
-    }
+    console.log("依据关键词推荐的内容：");
+    console.log(this.$store.state.relateRes);
   }
 };
 </script>
