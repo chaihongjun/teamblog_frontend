@@ -27,7 +27,6 @@
             <div class="article-meta">
               <span class="item">{{detail.publish_time}}</span>
               <span class="item">作者：{{detail.author}}</span>
-
               <span class="item">
                 分类：
                 <!-- <a href="https://demo.themebetter.com/dux/tech" rel="category tag">科技</a> /
@@ -75,14 +74,13 @@
               <span>)</span>
             </div>
           </div>-->
-          <div class="article-tags" v-if="keywords.length>0">
+          <div class="article-tags" v-if="keywords&&keywords.length>0">
             标签：
             <!-- <a
               href="https://demo.themebetter.com/dux/tag/%e6%b5%8f%e8%a7%88%e5%99%a8"
               rel="tag"
             >浏览器</a>
             <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>-->
-
             <a
               :href="'/tag/'+keyword"
               v-for="(keyword,index) in keywords"
@@ -111,14 +109,19 @@
               <a
                 :href="prevUrl"
                 rel="prev"
-                v-if="detailId===1?false:true"
+                v-if="prevUrl"
                 @click="updateDetailId(detailId-1)"
               >{{prevTitle}}</a>
             </span>
             <span class="article-nav-next">
               下一篇
               <br />
-              <a :href="nextUrl" rel="next" @click="updateDetailId(detailId+1)">{{nextTitle}}</a>
+              <a
+                :href="nextUrl"
+                rel="next"
+                @click="updateDetailId(detailId+1)"
+                v-if="nextUrl"
+              >{{nextTitle}}</a>
             </span>
           </nav>
           <div class="relates" v-if="relates">
@@ -182,7 +185,6 @@ export default {
         return this.$store.state.detailRes.data.id;
       }
     },
-
     // keywords() {
     //   if (this.$store.state.detailRes.data.keywords) {
     //     return this.$store.state.detailRes.data.keywords;
@@ -209,11 +211,16 @@ export default {
       }
     },
     prevUrl() {
-      let cateDir = this.$store.state.prevDetailRes.cateDir;
-      let cateName = this.$store.state.prevDetailRes.cateName;
-      let id = this.$store.state.prevDetailRes.data.id;
-
-      return cateDir + "/" + id + ".html";
+      if (
+        this.$store.state.prevDetailRes.cateDir &&
+        this.$store.state.prevDetailRes.cateName &&
+        this.$store.state.prevDetailRes.data.id
+      ) {
+        let cateDir = this.$store.state.prevDetailRes.cateDir;
+        let cateName = this.$store.state.prevDetailRes.cateName;
+        let id = this.$store.state.prevDetailRes.data.id;
+        return cateDir + "/" + id + ".html";
+      }
     },
     prevTitle() {
       if (this.$store.state.prevDetailRes.data.title) {
@@ -224,7 +231,6 @@ export default {
       let cateDir = this.$store.state.nextDetailRes.cateDir;
       let cateName = this.$store.state.nextDetailRes.cateName;
       let id = this.$store.state.nextDetailRes.data.id;
-
       return cateDir + "/" + id + ".html";
     },
     nextTitle() {
@@ -232,16 +238,18 @@ export default {
         return this.$store.state.nextDetailRes.data.title;
       }
     },
-
     // 关键词字符串转换成数组
     keywords() {
-      let keywordsString = this.$store.state.detailRes.data.keywords;
-
-      let keywordsArray = keywordsString.split(",");
-      return keywordsArray;
+      if (this.$store.state.detailRes.data.keywords) {
+        let keywordsString = this.$store.state.detailRes.data.keywords;
+        let keywordsArray = keywordsString.split(",");
+        return keywordsArray;
+      }
     },
     relates() {
-      return this.$store.state.relateRes;
+      if (this.$store.state.relateRes) {
+        return this.$store.state.relateRes;
+      }
     }
   },
   methods: {
@@ -263,43 +271,42 @@ export default {
     }
   },
   mounted() {
-    const _document = document;
-
-    this.getUrl();
-    //console.log(this.getUrl());
-    if (this.$route.params.detailId === undefined) {
-      this.$store.commit("updateDetailId", 1);
-    } else {
-      this.$store.commit("updateDetailId", this.$route.params.detailId);
-    }
-    let payload = {
-      detailId: this.$store.state.detailId
-    };
-    let payloadPrev = {
-      detailId: parseInt(this.$store.state.detailId) - 1
-    };
-    let payloadNext = {
-      detailId: parseInt(this.$store.state.detailId) + 1
-    };
-    //异步请求详情页数据
-    this.$store.dispatch("getDetailDataAction", payload);
-
-    //获取上一篇
-    this.$store.dispatch("getPrevDetailDataAction", payloadPrev);
-    //获取下一篇
-    this.$store.dispatch("getNextDetailDataAction", payloadNext);
-
-    // 获取相关推荐
     let that = this;
-    let payloadRelate = {
-      limit: 10,
-      keywords: that.keywords,
-      id: this.$store.state.detailId
-    };
-    this.$store.dispatch("getRelateRecommend", payloadRelate);
-
-    console.log("依据关键词推荐的内容：");
-    console.log(this.$store.state.relateRes);
+    this.$nextTick(function() {
+      const _document = document;
+      that.getUrl();
+      if (that.$route.params.detailId === undefined) {
+        that.$store.commit("updateDetailId", 1);
+      } else {
+        that.$store.commit("updateDetailId", that.$route.params.detailId);
+      }
+      let payload = {
+        detailId: that.$store.state.detailId
+      };
+      let payloadPrev = {
+        detailId: parseInt(that.$store.state.detailId) - 1
+      };
+      let payloadNext = {
+        detailId: parseInt(that.$store.state.detailId) + 1
+      };
+      //异步请求详情页数据
+      that.$store.dispatch("getDetailDataAction", payload);
+      //修改当前文档的标题
+      _document.title = that.$store.state.title;
+      //获取上一篇
+      that.$store.dispatch("getPrevDetailDataAction", payloadPrev);
+      //获取下一篇
+      that.$store.dispatch("getNextDetailDataAction", payloadNext);
+      // 获取相关推荐
+      let payloadRelate = {
+        limit: 10,
+        keywords: that.keywords,
+        id: that.$store.state.detailId
+      };
+      this.$store.dispatch("getRelateRecommend", payloadRelate);
+      console.log("依据关键词推荐的内容：");
+      console.log(that.$store.state.relateRes);
+    });
   }
 };
 </script>
