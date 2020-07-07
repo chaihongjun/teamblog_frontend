@@ -77,6 +77,19 @@ export default {
       return this.currentPageIndex;
     },
     getCateDir() {
+      //判断是普通栏目 还 tag 列表
+      // Tag 列表
+      if (window.location.href.indexOf("tag") != -1) {
+        //
+        return this.$route.params.keyword;
+      } else {
+        // 普通栏目页
+        if (this.cateDir === null) {
+          return "";
+        } else {
+          return this.cateDir;
+        }
+      }
       if (this.cateDir === null) {
         return "";
       } else {
