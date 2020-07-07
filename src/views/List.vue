@@ -21,7 +21,12 @@
           <h1>{{cateName}}</h1>
         </div>
         <article class="excerpt" v-for="(blog,index) in blogs" :key="index">
-          <a class="focus" :href="cateDir+'/'+blog.id+'.html'" @click="updateDetailId(blog.id)">
+          <!-- <a class="focus" :href="cateDir+'/'+blog.id+'.html'" @click="updateDetailId(blog.id)"> -->
+          <a
+            class="focus"
+            :href=" $route.params.keyword?'/' + cateDirPerPage[blog.cid]['dir']: $store.state.cateRes.cateDir +'/'+blog.id+'.html'"
+            @click="updateDetailId(blog.id)"
+          >
             <img
               :data-src="'localhost:8080/public'+blog.thumb"
               :alt="blog.title"
@@ -103,19 +108,21 @@ export default {
     last_page() {
       return this.$store.state.cateRes.last_page;
     },
-
     cateDir() {
-      return this.$store.state.cateRes.cateDir;
+      // 如果是 Tag 列表页
+      if (this.$route.params.keyword) {
+        return "/";
+      } else {
+        // 如果是普通文章列表
+        return this.$store.state.cateRes.cateDir;
+      }
     },
-
     cateId() {
       return this.$store.state.cateRes.cateId;
     },
-
     cateName() {
       return this.$store.state.cateRes.cateName;
     },
-
     cateDirPerPage() {
       return this.$store.state.cateRes.cateDirPerPage;
     }
@@ -132,14 +139,26 @@ export default {
     } else {
       this.$store.commit("updateCurrentPage", this.$route.params.pageNumber);
     }
-    let payload = {
-      cateId: this.$store.state.current_cateId, //栏目ID
-      current_page: this.$store.state.current_page //当前分页
-    };
+    // 首先判断是 普通栏目页 还是 tag列表
+    // tag 列表页
+    if (this.$route.params.keyword) {
+      let payload = {
+        keyword: this.$route.params.keyword,
+        current_page: this.$store.state.current_page
+      };
 
-    console.log(payload);
-    // 异步获取栏目数据
-    this.$store.dispatch("getCateDataAction", payload);
+      // 异步获取 tag 文章列表资源
+      this.$store.dispatch("getTagListAction", payload);
+    }
+    //  普通文章列表页
+    else {
+      let payload = {
+        cateId: this.$store.state.current_cateId, //栏目ID
+        current_page: this.$store.state.current_page //当前分页
+      };
+      // 异步获取栏目数据
+      this.$store.dispatch("getCateDataAction", payload);
+    }
   },
   methods: {
     //更新文章ID
