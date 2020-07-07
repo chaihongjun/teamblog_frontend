@@ -17,6 +17,9 @@ import { getSlideData } from "@/request/api";
 // 推荐相关
 import { getRelateData } from "@/request/api";
 
+// Tag 列表页
+import { getTagListData } from "@/request/api";
+
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -117,6 +120,12 @@ export default new Vuex.Store({
     getRelateRecommend(state, res) {
       state.relateRes = res.data;
     },
+
+    // tag 列表页
+    getTagList(state, res) {
+      //
+      state.cateRes = res;
+    },
   },
   // 页面数据请求
   actions: {
@@ -193,6 +202,13 @@ export default new Vuex.Store({
           }
         );
       }
+    },
+
+    // tag 列表页
+    getTagListAction(context, payload) {
+      getTagListData(payload.keyword, payload.current_page).then((res) => {
+        context.commit("getTagList", res);
+      });
     },
 
     //侧栏推荐制定
