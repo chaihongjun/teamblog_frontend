@@ -74,19 +74,30 @@
               <span>)</span>
             </div>
           </div>-->
-          <div class="article-tags" v-if="keywords&&keywords.length>0">
+          <div class="article-tags" v-if="(keywords)&&(keywords.length>0)">
             标签：
             <!-- <a
               href="https://demo.themebetter.com/dux/tag/%e6%b5%8f%e8%a7%88%e5%99%a8"
               rel="tag"
             >浏览器</a>
             <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>-->
-            <a
+
+            <router-link
+              exact
+              :to="'/tag/'+keyword"
+              v-for="(keyword,index) in keywords"
+              :key="index"
+              rel="tag"
+              @click="getTagList(keyword)"
+            >{{keyword}}</router-link>
+
+            <!-- <a
               :href="'/tag/'+keyword"
               v-for="(keyword,index) in keywords"
               :key="index"
               rel="tag"
-            >{{keyword}}</a>
+              @click="getTagList(keyword)"
+            >{{keyword}}</a>-->
           </div>
           <div class="article-author">
             <img
@@ -268,6 +279,15 @@ export default {
     //更新文章ID
     updateDetailId(payload) {
       this.$store.commit("updateDetailId", payload);
+    },
+    // 获取Tag列表
+    getTagList(keyword) {
+      // 异步加载 tag 资料列表
+      let payload = {
+        current_page: 1,
+        keyword: keyword
+      };
+      this.$store.dispatch("getTagListAction", payload);
     }
   },
   mounted() {
