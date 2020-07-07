@@ -32,3 +32,7 @@ export const getSlideData = (limit) => get("/api/slide/" + limit);
 // 根据关键词 获取相关推荐  id 为当前文档ID
 export const getRelateData = (keyword, limit, id) =>
   get("/api/relate/" + keyword + "/limit/" + limit + "/id/" + id);
+
+// Tag相关 文档
+export const getTagListData = (keyword, pageNumber) =>
+  get("/api/tag/" + keyword + "/page/" + pageNumber);
