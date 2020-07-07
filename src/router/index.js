@@ -60,6 +60,22 @@ const routes = [
     path: "/:cateNameOne/:detailId" + ".html", //文章详情
     component: () => import("../views/Detail.vue"),
   },
+  /////////////// Tag 列表 ///////////////////////////////
+  {
+    path: "/tag/:keyword",
+    component: () => import("../views/List.vue"),
+  },
+  {
+    path: "/tag/:keyword/page/1",
+    redirect: {
+      path: "/tag/:keyword",
+    },
+    component: () => import("../views/List.vue"),
+  },
+  {
+    path: "/tag/:keyword/page/:pageNumber",
+    component: () => import("../views/List.vue"),
+  },
   //////////////////////  二级栏目
   {
     path: "/:cateNameOne/:cateNameTwo/", //栏目列表
