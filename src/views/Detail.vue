@@ -312,7 +312,7 @@ export default {
       //异步请求详情页数据
       that.$store.dispatch("getDetailDataAction", payload);
       //修改当前文档的标题
-      _document.title = that.$store.state.title;
+      //_document.title = that.$store.state.title;
       //获取上一篇
       that.$store.dispatch("getPrevDetailDataAction", payloadPrev);
       //获取下一篇
