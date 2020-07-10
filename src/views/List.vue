@@ -24,7 +24,7 @@
           <!-- <a class="focus" :href="cateDir+'/'+blog.id+'.html'" @click="updateDetailId(blog.id)"> -->
           <a
             class="focus"
-            :href=" $route.params.keyword?'/' + cateDirPerPage[blog.cid]['dir']: $store.state.cateRes.cateDir +'/'+blog.id+'.html'"
+            :href="path?cateDirPerPage[blog.cid]['dir'] +'/'+blog.id+'.html': cateDir +'/'+blog.id+'.html'"
             @click="updateDetailId(blog.id)"
           >
             <img
@@ -96,6 +96,16 @@ export default {
     };
   },
   computed: {
+    path() {
+      if (window.location.href.indexOf("tag") != -1) {
+        //Tag 页面
+        return true;
+      }
+      // 普通页面
+      else {
+        return false;
+      }
+    },
     blogs() {
       return this.$store.state.cateRes.data;
     },
