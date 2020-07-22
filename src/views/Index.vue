@@ -147,6 +147,9 @@ export default {
     Loading
   },
   mounted() {
+    console.log("this.$router.options:");
+    console.log(this.$router.options.routes);
+
     const _document = document;
     //根据路由判断分页
     if (this.$route.params.pageNumber === undefined) {
