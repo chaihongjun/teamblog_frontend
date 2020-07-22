@@ -173,8 +173,8 @@ export default {
   methods: {
     //更新文章ID
     updateDetailId(payload) {
-      this.$store.dispatch("updateDetailId", payload);
-      // this.$store.commit("updateDetailId", payload);
+      //this.$store.dispatch("updateDetailId", payload);
+      this.$store.commit("updateDetailId", payload);
     }
   }
 };
