@@ -163,6 +163,16 @@ export default new Vuex.Store({
         }
       );
     },
+
+    //更新详情页ID
+    // updateDetailIdAction(context, payload) {
+    //   updateDetailId(payload).then(res=>{
+
+    //     context.commit('')
+
+    //   })
+    // },
+
     // 详情页 请求
     getDetailDataAction(context, payload) {
       getDetailData(payload.detailId).then((res) => {
