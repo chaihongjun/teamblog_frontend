@@ -22,9 +22,9 @@ const routes = [
     path: "/page/1",
     redirect: {
       path: "/",
-      meta: {
-        title: "博客首页_第一页",
-      },
+    },
+    meta: {
+      title: "博客首页",
     },
     component: () => import("../views/Index.vue"),
   },
@@ -32,7 +32,7 @@ const routes = [
     path: "/page/:pageNumber",
     component: () => import("../views/Index.vue"),
     meta: {
-      title: "博客首页_" + store.state.current_page,
+      title: "博客首页",
     },
   },
   /////////////////////////////   列表页   /////////////////////////
@@ -55,10 +55,16 @@ const routes = [
   {
     path: "/:cateNameOne/:cateNameTwo/:detailId" + ".html", //文章详情
     component: () => import("../views/Detail.vue"),
+    meta: {
+      title: store.state.detailRes.title + "博客首页",
+    },
   },
   {
     path: "/:cateNameOne/:detailId" + ".html", //文章详情
     component: () => import("../views/Detail.vue"),
+    meta: {
+      title: store.state.detailRes.title + "博客首页",
+    },
   },
   /////////////// Tag 列表 ///////////////////////////////
   {
@@ -112,6 +118,9 @@ const routes = [
   {
     path: "/:cateNameOne/:cateNameTwo/:cateNameThree/:detailId" + ".html", //文章详情
     component: () => import("../views/Detail.vue"),
+    meta: {
+      title: store.state.detailRes.title + "_博客首页",
+    },
   },
 ];
 const router = new VueRouter({
@@ -120,13 +129,9 @@ const router = new VueRouter({
   routes,
 });
 
-//全局导航
-router.afterEach((to, from) => {
-  console.log(to);
-  let id = to.params.detailId;
-  if (id) {
-    //
-  }
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  next();
 });
 
 export default router;
