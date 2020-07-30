@@ -81,7 +81,6 @@
               rel="tag"
             >浏览器</a>
             <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>-->
-
             <router-link
               exact
               :to="'/tag/'+keyword"
@@ -90,7 +89,6 @@
               rel="tag"
               @click="getTagList(keyword)"
             >{{keyword}}</router-link>
-
             <!-- <a
               :href="'/tag/'+keyword"
               v-for="(keyword,index) in keywords"
@@ -174,7 +172,7 @@ export default {
   name: "Detail",
   components: {
     Sidebar,
-    Loading
+    Loading,
   },
   data() {
     return {
@@ -182,7 +180,7 @@ export default {
       // detail: {},
       // cateDir: "",
       // cateName: "",
-      currentUrl: ""
+      currentUrl: "",
     };
   },
   computed: {
@@ -261,7 +259,7 @@ export default {
       if (this.$store.state.relateRes) {
         return this.$store.state.relateRes;
       }
-    }
+    },
   },
   methods: {
     //获取当前页面的URL
@@ -285,48 +283,49 @@ export default {
       // 异步加载 tag 资料列表
       let payload = {
         current_page: 1,
-        keyword: keyword
+        keyword: keyword,
       };
       this.$store.dispatch("getTagListAction", payload);
-    }
-  },
-  mounted() {
-    let that = this;
-    this.$nextTick(function() {
-      const _document = document;
-      that.getUrl();
-      if (that.$route.params.detailId === undefined) {
-        that.$store.commit("updateDetailId", 1);
+    },
+    getData() {
+      if (this.$route.params.detailId === undefined) {
+        this.$store.commit("updateDetailId", 1);
       } else {
-        that.$store.commit("updateDetailId", that.$route.params.detailId);
+        this.$store.commit("updateDetailId", this.$route.params.detailId);
       }
       let payload = {
-        detailId: that.$store.state.detailId
+        detailId: this.$store.state.detailId,
       };
       let payloadPrev = {
-        detailId: parseInt(that.$store.state.detailId) - 1
+        detailId: parseInt(this.$store.state.detailId) - 1,
       };
       let payloadNext = {
-        detailId: parseInt(that.$store.state.detailId) + 1
+        detailId: parseInt(this.$store.state.detailId) + 1,
       };
       //异步请求详情页数据
-      that.$store.dispatch("getDetailDataAction", payload);
-      //修改当前文档的标题
-      //_document.title = that.$store.state.title;
+      this.$store.dispatch("getDetailDataAction", payload);
       //获取上一篇
-      that.$store.dispatch("getPrevDetailDataAction", payloadPrev);
+      this.$store.dispatch("getPrevDetailDataAction", payloadPrev);
       //获取下一篇
-      that.$store.dispatch("getNextDetailDataAction", payloadNext);
+      this.$store.dispatch("getNextDetailDataAction", payloadNext);
       // 获取相关推荐
       let payloadRelate = {
         limit: 10,
-        keywords: that.keywords,
-        id: that.$store.state.detailId
+        keywords: this.keywords,
+        id: this.$store.state.detailId,
       };
       this.$store.dispatch("getRelateRecommend", payloadRelate);
-      console.log("依据关键词推荐的内容：");
-      console.log(that.$store.state.relateRes);
-    });
-  }
+      // 设置当前文章标题
+      // document.title = this.$store.state.title;
+    },
+  },
+  created() {
+    //  获取异步数据
+    this.getData();
+    this.getUrl();
+  },
+  watch: {
+    $route: "getData",
+  },
 };
 </script>
