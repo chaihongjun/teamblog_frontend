@@ -99,6 +99,8 @@ export default new Vuex.Store({
     getDetailData(state, res) {
       state.detailRes = res;
       state.title = res.data.title;
+      //给当前文章设置标题
+      document.title = state.title;
     },
 
     // 获取前一篇
