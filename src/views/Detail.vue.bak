@@ -1,0 +1,376 @@
+<!--
+ * @Author: ChaiHongJun
+ * @Date: 2020-05-26 10:05:27
+ * @LastEditTime: 2020-05-26 12:04:31
+ * @LastEditors: ChaiHongJun
+ * @Description: 头部文件注释
+--> 
+<template>
+  <div class="single">
+    <div class="breadcrumbs">
+      <div class="container">
+        当前位置：
+        <a href="/">首页</a>
+        <small>></small>
+        <a :href="currentUrl">{{cateName}}</a>
+        <small>></small> 正文
+      </div>
+    </div>
+    <section class="container" v-if="detail">
+      <div class="content-wrap">
+        <div class="content">
+          <Loading></Loading>
+          <header class="article-header">
+            <h1 class="article-title">
+              <a href="https://demo.themebetter.com/dux/70.html">{{detail.title}}</a>
+            </h1>
+            <div class="article-meta">
+              <span class="item">{{detail.publish_time}}</span>
+              <span class="item">作者：{{detail.author}}</span>
+              <span class="item">
+                分类：
+                <!-- <a href="https://demo.themebetter.com/dux/tech" rel="category tag">科技</a> /
+                <a href="https://demo.themebetter.com/dux/m" rel="category tag">移动</a> /
+                <a href="https://demo.themebetter.com/dux/rong" rel="category tag">融资</a> /
+                <a href="https://demo.themebetter.com/dux/news" rel="category tag">资讯</a>-->
+                <a :href="currentUrl" rel="category tag">{{cateName}}</a>
+              </span>
+              <span class="item post-views">阅读(16163)</span>
+              <span class="item">评论(0)</span>
+              <span class="item"></span>
+            </div>
+          </header>
+          <article class="article-content" v-html="detail.content" v-if="detail.content">
+            <!-- 内容区域 -->
+          </article>
+          <!-- <div class="post-actions">
+            <a href="javascript:;" etap="like" class="post-like action action-like" data-pid="70">
+              <i class="fa fa-thumbs-o-up"></i>赞(
+              <span>212</span>)
+            </a>
+            <a href="javascript:;" class="action action-rewards" data-event="rewards">
+              <i class="fa fa-jpy"></i> 打赏
+            </a>
+          </div>-->
+          <div class="post-copyright">
+            未经允许不得转载：
+            <a href="/">博客首页</a> &raquo;
+            <a :href="currentUrl">{{detail.title}}</a>
+          </div>
+          <!-- <div class="action-share">
+            <div class="bdsharebuttonbox">
+              <span>分享到：</span>
+              <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+              <a class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+              <a class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+              <a class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+              <a class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+              <a class="bds_bdhome" data-cmd="bdhome" title="分享到百度新首页"></a>
+              <a class="bds_tqf" data-cmd="tqf" title="分享到腾讯朋友"></a>
+              <a class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+              <a class="bds_more" data-cmd="more">更多</a>
+              <span>(</span>
+              <a class="bds_count" data-cmd="count" title="累计分享0次">0</a>
+              <span>)</span>
+            </div>
+          </div>-->
+          <div class="article-tags" v-if="(keywords)&&(keywords.length>0)">
+            标签：
+            <!-- <a
+              href="https://demo.themebetter.com/dux/tag/%e6%b5%8f%e8%a7%88%e5%99%a8"
+              rel="tag"
+            >浏览器</a>
+            <a href="https://demo.themebetter.com/dux/tag/%e7%a7%bb%e5%8a%a8" rel="tag">移动</a>-->
+
+            <router-link
+              exact
+              :to="'/tag/'+keyword"
+              v-for="(keyword,index) in keywords"
+              :key="index"
+              rel="tag"
+              @click="getTagList(keyword)"
+            >{{keyword}}</router-link>
+
+            <!-- <a
+              :href="'/tag/'+keyword"
+              v-for="(keyword,index) in keywords"
+              :key="index"
+              rel="tag"
+              @click="getTagList(keyword)"
+            >{{keyword}}</a>-->
+          </div>
+          <div class="article-author">
+            <img
+              alt
+              data-src="https://cdn.v2ex.com/gravatar/17b6dfae86510c3fe0a2a2a409ac0dbc?s=50&#038;d=mm&#038;r=g"
+              srcset="https://cdn.v2ex.com/gravatar/17b6dfae86510c3fe0a2a2a409ac0dbc?s=100&#038;d=mm&#038;r=g 2x"
+              class="avatar avatar-50 photo"
+              height="50"
+              width="50"
+            />
+            <h4>
+              <i class="fa fa-user" aria-hidden="true"></i>
+              <a title="查看更多文章" href="https://demo.themebetter.com/dux/author/admin">themebetter主题小秘</a>
+            </h4>Hi，我是themebetter主题小秘！我的老板是浩子，我还有其他几个兄弟姐妹，DUX、XIU、TOB等，我们都很帅气！其实我有很多话想说，只是，只是我比较内向！！这个介绍是不是很赞呢~~
+          </div>
+          <nav class="article-nav">
+            <span class="article-nav-prev">
+              上一篇
+              <br />
+              <a
+                :href="prevUrl"
+                rel="prev"
+                v-if="prevUrl"
+                @click="updateDetailId(detailId-1)"
+              >{{prevTitle}}</a>
+            </span>
+            <span class="article-nav-next">
+              下一篇
+              <br />
+              <a
+                :href="nextUrl"
+                rel="next"
+                @click="updateDetailId(detailId+1)"
+                v-if="nextUrl"
+              >{{nextTitle}}</a>
+            </span>
+          </nav>
+          <div class="relates" v-if="relates">
+            <div class="title">
+              <h3>相关推荐</h3>
+            </div>
+            <ul>
+              <li v-for="(relate,index) of relates" :key="index">
+                <a href="#">{{relate.title}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <Sidebar></Sidebar>
+    </section>
+    <div class="rewards-popover-mask" data-event="rewards-close"></div>
+    <div class="rewards-popover">
+      <h3>觉得文章有用就打赏一下文章作者</h3>
+      <div class="rewards-popover-item">
+        <h4>支付宝扫一扫打赏</h4>
+        <img src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/qrcode.png" />
+      </div>
+      <div class="rewards-popover-item">
+        <h4>微信扫一扫打赏</h4>
+        <img src="https://demo.themebetter.com/dux/wp-content/themes/dux/img/qrcode.png" />
+      </div>
+      <span class="rewards-popover-close" data-event="rewards-close">
+        <i class="fa fa-close"></i>
+      </span>
+    </div>
+  </div>
+</template>
+<script>
+import Sidebar from "@/components/Sidebar";
+import Loading from "@/views/Loading";
+import { getDetailData } from "@/request/api";
+export default {
+  name: "Detail",
+  components: {
+    Sidebar,
+    Loading,
+  },
+  data() {
+    return {
+      // detailId: 0,
+      // detail: {},
+      // cateDir: "",
+      // cateName: "",
+      currentUrl: "",
+    };
+  },
+  computed: {
+    detail() {
+      if (this.$store.state.detailRes.data) {
+        return this.$store.state.detailRes.data;
+      }
+    },
+    detailId() {
+      if (this.$store.state.detailRes.data.id) {
+        return this.$store.state.detailRes.data.id;
+      }
+    },
+    // keywords() {
+    //   if (this.$store.state.detailRes.data.keywords) {
+    //     return this.$store.state.detailRes.data.keywords;
+    //   }
+    // },
+    cateDir() {
+      if (this.$store.state.detailRes.cateDir) {
+        return this.$store.state.detailRes.cateDir;
+      }
+    },
+    cateName() {
+      if (this.$store.state.detailRes.cateName) {
+        return this.$store.state.detailRes.cateName;
+      }
+    },
+    preDetail() {
+      if (this.$store.state.prevDetailRes.data) {
+        return this.$store.state.prevDetailRes.data;
+      }
+    },
+    nextDetail() {
+      if (this.$store.state.nextDetailRes.data) {
+        return this.$store.state.nextDetailRes.data;
+      }
+    },
+    prevUrl() {
+      if (
+        this.$store.state.prevDetailRes.cateDir &&
+        this.$store.state.prevDetailRes.cateName &&
+        this.$store.state.prevDetailRes.data.id
+      ) {
+        let cateDir = this.$store.state.prevDetailRes.cateDir;
+        let cateName = this.$store.state.prevDetailRes.cateName;
+        let id = this.$store.state.prevDetailRes.data.id;
+        return cateDir + "/" + id + ".html";
+      }
+    },
+    prevTitle() {
+      if (this.$store.state.prevDetailRes.data.title) {
+        return this.$store.state.prevDetailRes.data.title;
+      }
+    },
+    nextUrl() {
+      let cateDir = this.$store.state.nextDetailRes.cateDir;
+      let cateName = this.$store.state.nextDetailRes.cateName;
+      let id = this.$store.state.nextDetailRes.data.id;
+      return cateDir + "/" + id + ".html";
+    },
+    nextTitle() {
+      if (this.$store.state.nextDetailRes.data.title) {
+        return this.$store.state.nextDetailRes.data.title;
+      }
+    },
+    // 关键词字符串转换成数组
+    keywords() {
+      if (this.$store.state.detailRes.data.keywords) {
+        let keywordsString = this.$store.state.detailRes.data.keywords;
+        let keywordsArray = keywordsString.split(",");
+        return keywordsArray;
+      }
+    },
+    relates() {
+      if (this.$store.state.relateRes) {
+        return this.$store.state.relateRes;
+      }
+    },
+  },
+  methods: {
+    //获取当前页面的URL
+    getUrl() {
+      // /product/computer/pc/15.html
+      let pathname = window.location.pathname;
+      let urlString = pathname.split(".")[0].split("/");
+      let currentPath = "";
+      for (let i = 1; i < urlString.length - 1; i++) {
+        currentPath += "/" + urlString[i];
+      }
+      this.currentUrl = currentPath;
+      console.log(this.currentUrl);
+    },
+    //更新文章ID
+    updateDetailId(payload) {
+      this.$store.commit("updateDetailId", payload);
+    },
+    // 获取Tag列表
+    getTagList(keyword) {
+      // 异步加载 tag 资料列表
+      let payload = {
+        current_page: 1,
+        keyword: keyword,
+      };
+      this.$store.dispatch("getTagListAction", payload);
+    },
+  },
+
+  // beforeRouteEnter(to, from, next) {
+  //   this.$nextTick(function () {
+  //     const _document = document;
+  //     this.getUrl();
+  //     if (this.$route.params.detailId === undefined) {
+  //       this.$store.commit("updateDetailId", 1);
+  //     } else {
+  //       this.$store.commit("updateDetailId", this.$route.params.detailId);
+  //     }
+  //     let payload = {
+  //       detailId: this.$store.state.detailId,
+  //     };
+  //     let payloadPrev = {
+  //       detailId: parseInt(this.$store.state.detailId) - 1,
+  //     };
+  //     let payloadNext = {
+  //       detailId: parseInt(this.$store.state.detailId) + 1,
+  //     };
+  //     //异步请求详情页数据
+  //     this.$store.dispatch("getDetailDataAction", payload);
+  //     //修改当前文档的标题
+  //     //_document.title = that.$store.state.title;
+  //     //获取上一篇
+  //     this.$store.dispatch("getPrevDetailDataAction", payloadPrev);
+  //     //获取下一篇
+  //     this.$store.dispatch("getNextDetailDataAction", payloadNext);
+  //     // 获取相关推荐
+  //     let payloadRelate = {
+  //       limit: 10,
+  //       keywords: that.keywords,
+  //       id: this.$store.state.detailId,
+  //     };
+  //     this.$store.dispatch("getRelateRecommend", payloadRelate);
+  //     console.log("依据关键词推荐的内容：");
+  //     console.log(this.$store.state.relateRes);
+  //   });
+
+  //   next();
+  // },
+
+  created() {
+    let that = this;
+    this.$nextTick(function () {
+      const _document = document;
+      that.getUrl();
+      if (that.$route.params.detailId === undefined) {
+        that.$store.commit("updateDetailId", 1);
+      } else {
+        that.$store.commit("updateDetailId", that.$route.params.detailId);
+      }
+      let payload = {
+        detailId: that.$store.state.detailId,
+      };
+      let payloadPrev = {
+        detailId: parseInt(that.$store.state.detailId) - 1,
+      };
+      let payloadNext = {
+        detailId: parseInt(that.$store.state.detailId) + 1,
+      };
+      //异步请求详情页数据
+      that.$store.dispatch("getDetailDataAction", payload);
+      //修改当前文档的标题
+      //_document.title = that.$store.state.title;
+      //获取上一篇
+      that.$store.dispatch("getPrevDetailDataAction", payloadPrev);
+      //获取下一篇
+      that.$store.dispatch("getNextDetailDataAction", payloadNext);
+      // 获取相关推荐
+      let payloadRelate = {
+        limit: 10,
+        keywords: that.keywords,
+        id: that.$store.state.detailId,
+      };
+      this.$store.dispatch("getRelateRecommend", payloadRelate);
+      console.log("依据关键词推荐的内容：");
+      console.log(that.$store.state.relateRes);
+    });
+  },
+  // watch: {
+  //   '$route'
+  // },
+};
+</script>
